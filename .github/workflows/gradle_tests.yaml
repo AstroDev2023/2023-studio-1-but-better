@@ -3,6 +3,9 @@ name: Build & Test
 on:
   workflow_dispatch:
   pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   run_unit_tests:
@@ -37,7 +40,7 @@ jobs:
 
       - name: Test Success
         uses: rjstone/discord-webhook-notify@v1
-        if: success()
+        if: ${{ success() && github.event_name == 'pull_request'}}
         with:
           severity: info
           username: ${{ github.event.sender.login }}
@@ -51,7 +54,7 @@ jobs:
 
       - name: Test Failure
         uses: rjstone/discord-webhook-notify@v1
-        if: failure()
+        if: ${{ failure() && github.event_name == 'pull_request'}}
         with:
           severity: error
           username: ${{ github.event.sender.login }}
@@ -61,6 +64,33 @@ jobs:
             "on [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})"
           footer:
             "${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() && github.event_name != 'pull_request'}}
+        with:
+          severity: info
+          username: ${{ github.event.sender.login }}
+          avatarUrl: ${{ github.event.sender.avatar_url }}
+          description: Tests Succeeded!
+          details:
+            "on ${{ github.ref_name }}"
+          footer:
+            "${{ github.ref_name }}"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Test Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() && github.event_name != 'pull_request'}}
+        with:
+          severity: error
+          username: ${{ github.event.sender.login }}
+          avatarUrl: ${{ github.event.sender.avatar_url }}
+          description: Tests Failed!
+          details:
+            "on ${{ github.ref_name }}"
+          footer:
+            "${{ github.ref_name }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Cleanup Gradle Cache
