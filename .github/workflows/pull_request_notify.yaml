@@ -1,0 +1,24 @@
+name: Pull Request Notify
+
+on:
+  pull_request:
+    types: [review_requested]
+
+jobs:
+  notify_discord:
+    runs-on: ubuntu-latest # Running on this OS, if we need it changed lmk
+    steps:
+      - name: Notify Reviewers
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          username: ${{ github.event.pull_request.user.login }}
+          color: '#5fcde4'
+          avatarUrl: ${{ github.event.pull_request.user.avatar_url }}
+          description:
+            "Requested review from **[${{ github.event.requested_reviewer.login }}](${{ github.event.requested_reviewer.html_url }})**"
+          details:
+            "on [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})"
+          footer:
+            "${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
