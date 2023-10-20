@@ -30,7 +30,7 @@ OUTPUT_VAL=0
 grep Exception game.log > /dev/null
 if [ $? -eq 0 ]; then
   echo "Run failed: Exception thrown."
-  echo "If this is unexpected, see https://github.com/UQcsse3200/2023-studio-1/wiki/Launch-Testing#my-commits-fail-this-test-and-i-dont-know-why"
+  echo "If this is unexpected, see https://github.com/AstroDev2023/2023-studio-1-but-better/wiki/Launch-Testing#my-commits-fail-this-test-and-i-dont-know-why"
   echo "Last 30 lines of log:"
   tail -30 game.log
   OUTPUT_VAL=1
