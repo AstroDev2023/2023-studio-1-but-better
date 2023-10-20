@@ -15,7 +15,7 @@ public class DiscordActivity {
         DiscordRPC.discordInitialize("1160854151668957245", handlers, true, "");
         rich = new DiscordRichPresence.Builder("Gardens of the Galaxy").build();
         DiscordRPC.discordUpdatePresence(rich);
-        updateLargeImage("https://raw.githubusercontent.com/UQcsse3200/2023-studio-1/main/source/core/assets/images/game_logo2.png");
+        updateLargeImage("https://raw.githubusercontent.com/AstroDev2023/2023-studio-1-but-better/main/source/core/assets/images/game_logo2.png");
     }
 
     /**

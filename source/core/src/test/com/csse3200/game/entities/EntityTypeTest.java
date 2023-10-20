@@ -19,7 +19,7 @@ class EntityTypeTest {
     enumValues = EntityType.values();
 
     // Expected enum names.
-    // https://github.com/UQcsse3200/2023-studio-1/wiki/Save---Load-game
+    // https://github.com/AstroDev2023/2023-studio-1-but-better/wiki/Save---Load-game
     expectedEnumNames = new HashSet<>(Arrays.asList(
         "PLAYER", "TRACTOR", "PLANT", "DECAYING_PLANT", "TILE", "COW",
         "CHICKEN", "ASTROLOTL", "OXYGEN_EATER", "ITEM", "FIRE_FLIES",
@@ -36,7 +36,7 @@ class EntityTypeTest {
    * after you complete that you can add the working enum
    * type to the list of approved enums at the top of this
    * this is all in the documentation at
-   * https://github.com/UQcsse3200/2023-studio-1/wiki/Save---Load-game
+   * https://github.com/AstroDev2023/2023-studio-1-but-better/wiki/Save---Load-game
    * at the bottom
    * 
    */
@@ -47,7 +47,7 @@ class EntityTypeTest {
     for (EntityType enumValue : enumValues) {
       if (!expectedEnumNames.contains(enumValue.name())) {
         fail("Enum value '" + enumValue.name()
-            + "' is not recognized. Please view https://github.com/UQcsse3200/2023-studio-1/wiki/Save---Load-game for instructions.");
+            + "' is not recognized. Please view https://github.com/AstroDev2023/2023-studio-1-but-better/wiki/Save---Load-game for instructions.");
       }
     }
   }
@@ -61,7 +61,7 @@ class EntityTypeTest {
    * after you complete that you can add the working enum
    * type to the list of approved enums at the top of this
    * this is all in the documentation at
-   * https://github.com/UQcsse3200/2023-studio-1/wiki/Save---Load-game
+   * https://github.com/AstroDev2023/2023-studio-1-but-better/wiki/Save---Load-game
    * at the bottom
    * 
    */
