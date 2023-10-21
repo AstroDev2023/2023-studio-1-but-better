@@ -14,3 +14,5 @@ You are welcome to use the game engine for your own purposes. It is released und
 
 ## Documentation and Reports
 [SonarCloud](https://sonarcloud.io/project/overview?id=AstroDev2023_2023-studio-1-but-better)
+
+imagine reading all this, fuck tht
