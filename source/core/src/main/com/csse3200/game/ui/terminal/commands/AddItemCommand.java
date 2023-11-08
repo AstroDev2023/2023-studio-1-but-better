@@ -1,14 +1,17 @@
 package com.csse3200.game.ui.terminal.commands;
 
-import java.util.*;
-import java.util.function.Supplier;
-
-import com.csse3200.game.entities.factories.ItemFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.csse3200.game.components.player.InventoryComponent;
 import com.csse3200.game.entities.Entity;
+import com.csse3200.game.entities.factories.ItemFactory;
 import com.csse3200.game.services.ServiceLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Supplier;
 
 public class AddItemCommand implements Command {
 

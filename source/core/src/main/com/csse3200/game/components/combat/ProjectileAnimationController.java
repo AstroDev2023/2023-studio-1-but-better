@@ -4,24 +4,24 @@ import com.csse3200.game.components.Component;
 import com.csse3200.game.rendering.AnimationRenderComponent;
 
 public class ProjectileAnimationController extends Component {
-    protected AnimationRenderComponent animator;
+	protected AnimationRenderComponent animator;
 
-    @Override
-    public void create() {
-        animator = this.entity.getComponent(AnimationRenderComponent.class);
+	@Override
+	public void create() {
+		animator = this.entity.getComponent(AnimationRenderComponent.class);
 
-        entity.getEvents().addListener("flightStart", this::animateFlight);
-        entity.getEvents().addListener("impactStart", this::animateImpact);
+		entity.getEvents().addListener("flightStart", this::animateFlight);
+		entity.getEvents().addListener("impactStart", this::animateImpact);
 
-        animateFlight();
-    }
+		animateFlight();
+	}
 
-    private void animateFlight() {
+	private void animateFlight() {
 
-        animator.startAnimation("flight");
-    }
+		animator.startAnimation("flight");
+	}
 
-    private void animateImpact() {
-        animator.startAnimation("impact");
-    }
+	private void animateImpact() {
+		animator.startAnimation("impact");
+	}
 }

@@ -1,10 +1,10 @@
 package com.csse3200.game.components.items;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.csse3200.game.components.Component;
 import com.csse3200.game.services.ServiceLocator;
+
+import java.util.UUID;
 
 
 public class ItemComponent extends Component {
@@ -22,8 +22,8 @@ public class ItemComponent extends Component {
 	/**
 	 * Constructor for Item
 	 *
-	 * @param itemName user facing name for item
-	 * @param itemType the enum for type of item
+	 * @param itemName    user facing name for item
+	 * @param itemType    the enum for type of item
 	 * @param texturePath path for the item texture
 	 */
 	public ItemComponent(String itemName, ItemType itemType, String texturePath) {
@@ -33,9 +33,9 @@ public class ItemComponent extends Component {
 	/**
 	 * Constructor for Item
 	 *
-	 * @param itemName user facing name
-	 * @param itemType the enum for type of item
-	 * @param price    sellable price of the item
+	 * @param itemName    user facing name
+	 * @param itemType    the enum for type of item
+	 * @param price       sellable price of the item
 	 * @param texturePath path for the item texture
 	 */
 	public ItemComponent(String itemName, ItemType itemType, int price, String texturePath) {
@@ -48,7 +48,7 @@ public class ItemComponent extends Component {
 	 * @param itemName        user facing name for item
 	 * @param itemType        the enum for type of item
 	 * @param itemDescription user facing description for item
-	 * @param texturePath path for the item texture
+	 * @param texturePath     path for the item texture
 	 */
 	public ItemComponent(String itemName, ItemType itemType, String itemDescription, String texturePath) {
 		this(itemName, itemType, itemDescription, 0, false, false, texturePath);
@@ -62,14 +62,13 @@ public class ItemComponent extends Component {
 	 * @param itemType        the enum for type of item
 	 * @param itemDescription user facing description for item
 	 * @param price           price of item
-	 * @param texturePath path for the item texture
+	 * @param texturePath     path for the item texture
 	 */
 	public ItemComponent(String itemName, ItemType itemType, String itemDescription, int price, String texturePath) {
 		this(itemName, itemType, itemDescription, price, true, false, texturePath);
 	}
 
 	/**
-	 *
 	 * @param itemName        user facing name for item
 	 * @param itemType        the enum for type of item
 	 * @param itemDescription user facing description for item

@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * Component which can be added to entities allowing them to have {@link ParticleEffect} rendering on them and attached
  * to their body. This also enables the {@link ParticleService} to keep track of these entities, rendering their effects
  * in the game loop.
- *
+ * <p>
  * This component also allows multiple particle effects to be rendered on a single entity ct the one time.
  */
 public class ParticleEffectComponent extends Component {
@@ -48,6 +48,7 @@ public class ParticleEffectComponent extends Component {
 
 	/**
 	 * Renders all the effects that are being managed by the component for this entity.
+	 *
 	 * @param batch sprite batch to use while rendering
 	 * @param delta delta time value used to update the particle effects
 	 */
@@ -69,6 +70,7 @@ public class ParticleEffectComponent extends Component {
 
 	/**
 	 * Starts a {@link ParticleEffect} on an entity, enabling this component to control it throughout its lifecycle
+	 *
 	 * @param effectType type of {@link ParticleEffect} to be added to the entity
 	 */
 	public void startEffect(ParticleService.ParticleEffectType effectType) {
@@ -91,6 +93,7 @@ public class ParticleEffectComponent extends Component {
 	/**
 	 * Stops rendering an effect on the entity, freeing the effect and giving it back to the {@link ParticleEffectPool}.
 	 * This will also remove the effect from the {@link List} of effects to be controlled by this component.
+	 *
 	 * @param effectType type of {@link ParticleEffect} to be stopped
 	 */
 	public void stopEffect(ParticleService.ParticleEffectType effectType) {
@@ -108,6 +111,7 @@ public class ParticleEffectComponent extends Component {
 
 	/**
 	 * Stops all particle effects by category in the entity's list of effects
+	 *
 	 * @param category category of particle effects
 	 */
 	public void stopEffectCategory(String category) {
@@ -132,6 +136,7 @@ public class ParticleEffectComponent extends Component {
 
 	/**
 	 * Gets the number of effects that are currently being tracked by the component.
+	 *
 	 * @return number of effects being tracked by this component.
 	 */
 	public int getNumEffects() {
@@ -141,6 +146,7 @@ public class ParticleEffectComponent extends Component {
 	/**
 	 * Determines whether a {@link ParticleEffect} is being tracked by this component with the same type as the given
 	 * {@link com.csse3200.game.services.ParticleService.ParticleEffectType}.
+	 *
 	 * @param effectType type of particle effect
 	 * @return whether that particle is being tracked
 	 */

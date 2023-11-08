@@ -10,6 +10,7 @@ public class ShipEaterAnimationController extends Component {
 	private boolean isHiding;
 	private boolean isEating;
 	private AnimationRenderComponent animator;
+
 	@Override
 	public void create() {
 		animator = this.entity.getComponent(AnimationRenderComponent.class);
@@ -18,6 +19,7 @@ public class ShipEaterAnimationController extends Component {
 		entity.getEvents().addListener("diggingUpdated", this::setDigging);
 		entity.getEvents().addListener("hidingUpdated", this::setHiding);
 	}
+
 	void setDigging(boolean isDigging) {
 		this.isDigging = isDigging;
 	}

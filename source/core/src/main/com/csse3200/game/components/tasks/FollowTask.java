@@ -7,105 +7,111 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/** Follows a target entity until they get too far away or line of sight is lost */
+/**
+ * Follows a target entity until they get too far away or line of sight is lost
+ */
 public class FollowTask extends ChaseTask {
-  private static final Logger logger = LoggerFactory.getLogger(FollowTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(FollowTask.class);
 
-  /** Distance to target before stopping. */
-  private final float stoppingDistance;
-  /** Speed to follow the player. */
-  private final Vector2 speed;
+	/**
+	 * Distance to target before stopping.
+	 */
+	private final float stoppingDistance;
+	/**
+	 * Speed to follow the player.
+	 */
+	private final Vector2 speed;
 
-  /**
-   * @param target The entity to follow.
-   * @param priority Task priority when following (0 when not following).
-   * @param viewDistance Maximum distance from the entity at which following can start.
-   * @param maxFollowDistance Maximum distance from the entity while following before giving up.
-   * @param stoppingDistance The distance at which the entity stops following target.
-   * @param speed The speed at which the entity follows the player.
-   */
-  public FollowTask(Entity target, int priority, float viewDistance, float maxFollowDistance,
-                    float stoppingDistance, Vector2 speed) {
-    super(target, priority, viewDistance, maxFollowDistance, speed);
-    this.stoppingDistance = stoppingDistance;
-    this.speed = speed;
-  }
+	/**
+	 * @param target            The entity to follow.
+	 * @param priority          Task priority when following (0 when not following).
+	 * @param viewDistance      Maximum distance from the entity at which following can start.
+	 * @param maxFollowDistance Maximum distance from the entity while following before giving up.
+	 * @param stoppingDistance  The distance at which the entity stops following target.
+	 * @param speed             The speed at which the entity follows the player.
+	 */
+	public FollowTask(Entity target, int priority, float viewDistance, float maxFollowDistance,
+	                  float stoppingDistance, Vector2 speed) {
+		super(target, priority, viewDistance, maxFollowDistance, speed);
+		this.stoppingDistance = stoppingDistance;
+		this.speed = speed;
+	}
 
 
-  /**
-   * @param target The entity to follow.
-   * @param priority Task priority when following (0 when not following).
-   * @param viewDistance Maximum distance from the entity at which following can start.
-   * @param maxFollowDistance Maximum distance from the entity while following before giving up.
-   * @param stoppingDistance The distance at which the entity stops following target.
-   * @param speed The speed at which the entity follows the player.
-   * @param checkVisibility  Checks to see if the entity will consider obstacles in its path.
-   */
-  public FollowTask(Entity target, int priority, float viewDistance, float maxFollowDistance,
-                    float stoppingDistance, Vector2 speed, boolean checkVisibility) {
-    super(target, priority, viewDistance, maxFollowDistance, speed, checkVisibility);
-    this.stoppingDistance = stoppingDistance;
-    this.speed = speed;
-  }
+	/**
+	 * @param target            The entity to follow.
+	 * @param priority          Task priority when following (0 when not following).
+	 * @param viewDistance      Maximum distance from the entity at which following can start.
+	 * @param maxFollowDistance Maximum distance from the entity while following before giving up.
+	 * @param stoppingDistance  The distance at which the entity stops following target.
+	 * @param speed             The speed at which the entity follows the player.
+	 * @param checkVisibility   Checks to see if the entity will consider obstacles in its path.
+	 */
+	public FollowTask(Entity target, int priority, float viewDistance, float maxFollowDistance,
+	                  float stoppingDistance, Vector2 speed, boolean checkVisibility) {
+		super(target, priority, viewDistance, maxFollowDistance, speed, checkVisibility);
+		this.stoppingDistance = stoppingDistance;
+		this.speed = speed;
+	}
 
-  /**
-   * Starts the follow task by initializing the movement task and triggering the "followStart" event.
-   */
-  @Override
-  public void start() {
-    status = Status.ACTIVE;
-    setMovementTask(new MovementTask(getTarget().getCenterPosition(), speed, 1.5f));
-    getMovementTask().create(owner);
-    getMovementTask().start();
-    logger.info("Follow Task Active");
-    this.owner.getEntity().getEvents().trigger("followStart");
-    this.owner.getEntity().getEvents().trigger("startEffect", "followStart");
-  }
+	/**
+	 * Starts the follow task by initializing the movement task and triggering the "followStart" event.
+	 */
+	@Override
+	public void start() {
+		status = Status.ACTIVE;
+		setMovementTask(new MovementTask(getTarget().getCenterPosition(), speed, 1.5f));
+		getMovementTask().create(owner);
+		getMovementTask().start();
+		logger.info("Follow Task Active");
+		this.owner.getEntity().getEvents().trigger("followStart");
+		this.owner.getEntity().getEvents().trigger("startEffect", "followStart");
+	}
 
-  /**
-   * Updates the follow task by updating the movement task and stopping it if the entity is too close to the target.
-   */
-  @Override
-  public void update() {
-    //Stops follow if entity is too close to target
-    if(getDistanceToTarget() <= stoppingDistance) {
-      owner.getEntity().getComponent(PhysicsMovementComponent.class).setEnabled(false);
-      return;
-    }
+	/**
+	 * Updates the follow task by updating the movement task and stopping it if the entity is too close to the target.
+	 */
+	@Override
+	public void update() {
+		//Stops follow if entity is too close to target
+		if (getDistanceToTarget() <= stoppingDistance) {
+			owner.getEntity().getComponent(PhysicsMovementComponent.class).setEnabled(false);
+			return;
+		}
 
-    owner.getEntity().getComponent(PhysicsMovementComponent.class).setEnabled(true);
-    getMovementTask().setTarget(getTarget().getCenterPosition());
-    getMovementTask().update();
-    if (getMovementTask().getStatus() != Status.ACTIVE) {
-      this.owner.getEntity().getEvents().trigger("followStart");
-      getMovementTask().start();
-    }
-  }
+		owner.getEntity().getComponent(PhysicsMovementComponent.class).setEnabled(true);
+		getMovementTask().setTarget(getTarget().getCenterPosition());
+		getMovementTask().update();
+		if (getMovementTask().getStatus() != Status.ACTIVE) {
+			this.owner.getEntity().getEvents().trigger("followStart");
+			getMovementTask().start();
+		}
+	}
 
-  /**
-   * Stops the follow task and the associated movement task, and triggers the "followStop" event.
-   */
-  @Override
-  public void stop() {
-    owner.getEntity().getComponent(PhysicsMovementComponent.class).setEnabled(true);
-    super.stop();
-    logger.info("Follow Task Stopped");
-    this.owner.getEntity().getEvents().trigger("followStop");
-    this.owner.getEntity().getEvents().trigger("stopEffect", "followStart");
-  }
+	/**
+	 * Stops the follow task and the associated movement task, and triggers the "followStop" event.
+	 */
+	@Override
+	public void stop() {
+		owner.getEntity().getComponent(PhysicsMovementComponent.class).setEnabled(true);
+		super.stop();
+		logger.info("Follow Task Stopped");
+		this.owner.getEntity().getEvents().trigger("followStop");
+		this.owner.getEntity().getEvents().trigger("stopEffect", "followStart");
+	}
 
-  /**
-   * Determines the priority when the follow task is inactive based on the distance to the target,
-   * the visibility of the target entity, and the stopping distance.
-   *
-   * @return The inactive priority level or -1 if conditions are not met.
-   */
-  @Override
-  protected int getInactivePriority() {
-    float dst = getDistanceToTarget();
-    if (dst < getViewDistance() && isTargetVisible()) {
-      return getRawPriority();
-    }
-    return -1;
-  }
+	/**
+	 * Determines the priority when the follow task is inactive based on the distance to the target,
+	 * the visibility of the target entity, and the stopping distance.
+	 *
+	 * @return The inactive priority level or -1 if conditions are not met.
+	 */
+	@Override
+	protected int getInactivePriority() {
+		float dst = getDistanceToTarget();
+		if (dst < getViewDistance() && isTargetVisible()) {
+			return getRawPriority();
+		}
+		return -1;
+	}
 }

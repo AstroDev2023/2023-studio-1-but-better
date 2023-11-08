@@ -48,7 +48,7 @@ class ShipProgressComponentTest {
 
 	@Test()
 	void testIncrement() {
-		try (MockedStatic<ItemFactory> itemFactory = mockStatic(ItemFactory.class)){
+		try (MockedStatic<ItemFactory> itemFactory = mockStatic(ItemFactory.class)) {
 			itemFactory.when(ItemFactory::createTeleportDevice).thenReturn(new Entity());
 
 			ship.getEvents().trigger(ShipFactory.events.ADD_PART.name(), 1);
@@ -74,7 +74,7 @@ class ShipProgressComponentTest {
 
 	@Test()
 	void testDecrement() {
-		try (MockedStatic<ItemFactory> itemFactory = mockStatic(ItemFactory.class)){
+		try (MockedStatic<ItemFactory> itemFactory = mockStatic(ItemFactory.class)) {
 			itemFactory.when(ItemFactory::createTeleportDevice).thenReturn(new Entity());
 			// Start by unlocking all features
 			ship.getEvents().trigger(ShipFactory.events.ADD_PART.name(), 10);

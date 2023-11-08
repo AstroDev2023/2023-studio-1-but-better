@@ -29,72 +29,72 @@ import static org.mockito.Mockito.when;
 @ExtendWith(GameExtension.class)
 class PlaceableFactoryTest {
 
-    @BeforeEach
-    void beforeEach() {
-        ServiceLocator.registerPhysicsService(new PhysicsService());
-        ServiceLocator.registerEntityService(new EntityService());
-        ServiceLocator.registerRenderService(new RenderService());
-        ServiceLocator.registerInventoryDisplayManager(new InventoryDisplayManager(null));
+	@BeforeEach
+	void beforeEach() {
+		ServiceLocator.registerPhysicsService(new PhysicsService());
+		ServiceLocator.registerEntityService(new EntityService());
+		ServiceLocator.registerRenderService(new RenderService());
+		ServiceLocator.registerInventoryDisplayManager(new InventoryDisplayManager(null));
 
-        /* Mock our ResourceService for the textures */
+		/* Mock our ResourceService for the textures */
 
 
-        ResourceService mockResourceService = mock(ResourceService.class);
-        when(mockResourceService.getAsset(anyString(), any())).thenReturn(null);
-        TextureAtlas mockTextureAtlas = mock(TextureAtlas.class);
-        when(mockTextureAtlas.findRegion(anyString())).thenReturn(null);
-        when(mockResourceService.getAsset(anyString(), eq(TextureAtlas.class))).thenReturn(mockTextureAtlas);
-        ServiceLocator.registerResourceService(mockResourceService);
-       
-    }
+		ResourceService mockResourceService = mock(ResourceService.class);
+		when(mockResourceService.getAsset(anyString(), any())).thenReturn(null);
+		TextureAtlas mockTextureAtlas = mock(TextureAtlas.class);
+		when(mockTextureAtlas.findRegion(anyString())).thenReturn(null);
+		when(mockResourceService.getAsset(anyString(), eq(TextureAtlas.class))).thenReturn(mockTextureAtlas);
+		ServiceLocator.registerResourceService(mockResourceService);
 
-    void baseComponentsAssertion(Entity e) {
-        assertNotNull(e.getComponent(PlaceableEvents.class));
-        assertNotNull(e.getComponent(PhysicsComponent.class));
-        assertNotNull(e.getComponent(HitboxComponent.class));
-        assertNotNull(e.getComponent(ColliderComponent.class));
-    }
+	}
 
-    @Test
-    void shouldCreateBase() {
-        Entity e = PlaceableFactory.createBasePlaceable(EntityType.TRACTOR);
-        this.baseComponentsAssertion(e);
-    }
+	void baseComponentsAssertion(Entity e) {
+		assertNotNull(e.getComponent(PlaceableEvents.class));
+		assertNotNull(e.getComponent(PhysicsComponent.class));
+		assertNotNull(e.getComponent(HitboxComponent.class));
+		assertNotNull(e.getComponent(ColliderComponent.class));
+	}
 
-    @Test
-    void shouldCreateFence() {
-        Entity e = PlaceableFactory.createFence();
+	@Test
+	void shouldCreateBase() {
+		Entity e = PlaceableFactory.createBasePlaceable(EntityType.TRACTOR);
+		this.baseComponentsAssertion(e);
+	}
 
-	    assertSame(EntityType.FENCE, e.getType());
-        assertNotNull(e.getComponent(FenceComponent.class));
-        this.baseComponentsAssertion(e);
-    }
+	@Test
+	void shouldCreateFence() {
+		Entity e = PlaceableFactory.createFence();
 
-    @Test
-    void shouldCreateGate() {
-        Entity e = PlaceableFactory.createGate();
+		assertSame(EntityType.FENCE, e.getType());
+		assertNotNull(e.getComponent(FenceComponent.class));
+		this.baseComponentsAssertion(e);
+	}
 
-	    assertSame(EntityType.GATE, e.getType());
-        assertNotNull(e.getComponent(FenceComponent.class));
-        this.baseComponentsAssertion(e);
-    }
+	@Test
+	void shouldCreateGate() {
+		Entity e = PlaceableFactory.createGate();
 
-    @Test
-    void shouldCreateSprinkler() {
-        Entity e = PlaceableFactory.createSprinkler();
+		assertSame(EntityType.GATE, e.getType());
+		assertNotNull(e.getComponent(FenceComponent.class));
+		this.baseComponentsAssertion(e);
+	}
 
-	    assertSame(EntityType.SPRINKLER, e.getType());
-        assertNotNull(e.getComponent(SprinklerComponent.class));
-        this.baseComponentsAssertion(e);
-    }
+	@Test
+	void shouldCreateSprinkler() {
+		Entity e = PlaceableFactory.createSprinkler();
 
-    @Test
-    void shouldCreatePump() {
-        Entity e = PlaceableFactory.createPump();
+		assertSame(EntityType.SPRINKLER, e.getType());
+		assertNotNull(e.getComponent(SprinklerComponent.class));
+		this.baseComponentsAssertion(e);
+	}
 
-	    assertSame(EntityType.PUMP, e.getType());
-        assertNotNull(e.getComponent(SprinklerComponent.class));
-        this.baseComponentsAssertion(e);
-    }
-    
+	@Test
+	void shouldCreatePump() {
+		Entity e = PlaceableFactory.createPump();
+
+		assertSame(EntityType.PUMP, e.getType());
+		assertNotNull(e.getComponent(SprinklerComponent.class));
+		this.baseComponentsAssertion(e);
+	}
+
 } 

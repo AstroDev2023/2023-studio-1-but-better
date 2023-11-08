@@ -37,7 +37,6 @@ class ClueComponentTest {
 		clueComponent = new ClueComponent();
 
 
-
 		expectedLocation = new Vector2(30, 40);
 		actualLocation = clueComponent.getCurrentBaseLocation();
 
@@ -61,14 +60,12 @@ class ClueComponentTest {
 		clueComponent = new ClueComponent();
 
 
-
 		expectedLocation = new Vector2(30, 75);
 		actualLocation = clueComponent.getCurrentBaseLocation();
 
 		assertEquals(expectedLocation.x, actualLocation.x);
 		assertEquals(expectedLocation.y, actualLocation.y);
 		clueComponent = new ClueComponent();
-
 
 
 		expectedLocation = new Vector2(20, 60);

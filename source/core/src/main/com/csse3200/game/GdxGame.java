@@ -1,17 +1,16 @@
 package com.csse3200.game;
 
-import static com.badlogic.gdx.Gdx.app;
-
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.csse3200.game.files.UserSettings;
 import com.csse3200.game.screens.*;
 import com.csse3200.game.services.ServiceLocator;
 import com.csse3200.game.utils.DiscordActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.csse3200.game.files.UserSettings;
+import static com.badlogic.gdx.Gdx.app;
 
 /**
  * Entry point of the non-platform-specific game logic. Controls which screen is currently running.
@@ -19,117 +18,120 @@ import com.csse3200.game.files.UserSettings;
  * machine (See the State Pattern).
  */
 public class GdxGame extends Game {
-  private static final Logger logger = LoggerFactory.getLogger(GdxGame.class);
-  private boolean loadSaveOnStart = false;
-  private DiscordActivity discordActivity;
-  @Override
-  public void create() {
-    logger.info("Creating game");
-    loadSettings();
-    ServiceLocator.registerGame(this);
+	private static final Logger logger = LoggerFactory.getLogger(GdxGame.class);
+	private boolean loadSaveOnStart = false;
+	private DiscordActivity discordActivity;
 
-    // Sets background to light yellow
-    Gdx.gl.glClearColor(0.0f, 0.098f, 0.309f, 1.0f);
-    if (!System.getProperty("os.name").contains("Mac")) {
-      discordActivity = new DiscordActivity();
-    }
-    setScreen(ScreenType.MAIN_MENU);
-  }
+	@Override
+	public void create() {
+		logger.info("Creating game");
+		loadSettings();
+		ServiceLocator.registerGame(this);
 
-  /**
-   * Loads the game's settings.
-   */
-  private void loadSettings() {
-    logger.debug("Loading game settings");
-    UserSettings.Settings settings = UserSettings.get();
-    UserSettings.applySettings(settings);
-  }
+		// Sets background to light yellow
+		Gdx.gl.glClearColor(0.0f, 0.098f, 0.309f, 1.0f);
+		if (!System.getProperty("os.name").contains("Mac")) {
+			discordActivity = new DiscordActivity();
+		}
+		setScreen(ScreenType.MAIN_MENU);
+	}
 
-   /**
-   * isLoadOnStart lets the game know if the player wants to load up a saved game
-   *    if false the game will load up as default
-   * @return
-   */
-  public boolean isLoadOnStart(){
-    return loadSaveOnStart;
-  }
+	/**
+	 * Loads the game's settings.
+	 */
+	private void loadSettings() {
+		logger.debug("Loading game settings");
+		UserSettings.Settings settings = UserSettings.get();
+		UserSettings.applySettings(settings);
+	}
 
-  public void setLoadOnStart(boolean value){
-    loadSaveOnStart = value;
-  }
+	/**
+	 * isLoadOnStart lets the game know if the player wants to load up a saved game
+	 * if false the game will load up as default
+	 *
+	 * @return
+	 */
+	public boolean isLoadOnStart() {
+		return loadSaveOnStart;
+	}
 
-  /**
-   * Sets the game's screen to a new screen of the provided type.
-   * @param screenType screen type
-   */
-  public void setScreen(ScreenType screenType) {
-    logger.info("Setting game screen to {}", screenType);
-    Screen currentScreen = getScreen();
-    if (currentScreen != null) {
-      currentScreen.dispose();
-    }
-    setScreen(newScreen(screenType));
-  }
+	public void setLoadOnStart(boolean value) {
+		loadSaveOnStart = value;
+	}
 
-  @Override
-  public void dispose() {
-    logger.debug("Disposing of current screen");
-    getScreen().dispose();
-  }
+	/**
+	 * Sets the game's screen to a new screen of the provided type.
+	 *
+	 * @param screenType screen type
+	 */
+	public void setScreen(ScreenType screenType) {
+		logger.info("Setting game screen to {}", screenType);
+		Screen currentScreen = getScreen();
+		if (currentScreen != null) {
+			currentScreen.dispose();
+		}
+		setScreen(newScreen(screenType));
+	}
 
-  /**
-   * Create a new screen of the provided type.
-   * @param screenType screen type
-   * @return new screen
-   */
-  private Screen newScreen(ScreenType screenType) {
-    switch (screenType) {
-      case MAIN_MENU:
-        updateDiscord("Perusing the Main Menu");
-        return new MainMenuScreen(this);
-      case LOAD_GAME:
-        updateDiscord("Planting Crops");
-        setLoadOnStart(true);
-        return new MainGameScreen(this);
-      case MAIN_GAME:
-        updateDiscord("Planting Crops");
-        return new MainGameScreen(this);
-      case SETTINGS:
-        updateDiscord("Changing Settings");
-        return new SettingsScreen(this);
-      case CONTROLS:
-        return new ControlsScreen(this);
-      case INTRO:
-        setLoadOnStart(false);
-        return new IntroScreen(this);
-      case LOSESCREEN:
-        return new LoseScreen(this);
-      case ENDCREDITS:
-        return new EndCreditsScreen(this);
-      case WINSCREEN:
-        return new WinScreen(this);
-      default:
-        return null;
-    }
-  }
+	@Override
+	public void dispose() {
+		logger.debug("Disposing of current screen");
+		getScreen().dispose();
+	}
 
-  private void updateDiscord(String activity) {
-    if (discordActivity != null) {
-      discordActivity.updateDiscordStatus(activity);
-      discordActivity.startTimer();
-    }
-  }
+	/**
+	 * Create a new screen of the provided type.
+	 *
+	 * @param screenType screen type
+	 * @return new screen
+	 */
+	private Screen newScreen(ScreenType screenType) {
+		switch (screenType) {
+			case MAIN_MENU:
+				updateDiscord("Perusing the Main Menu");
+				return new MainMenuScreen(this);
+			case LOAD_GAME:
+				updateDiscord("Planting Crops");
+				setLoadOnStart(true);
+				return new MainGameScreen(this);
+			case MAIN_GAME:
+				updateDiscord("Planting Crops");
+				return new MainGameScreen(this);
+			case SETTINGS:
+				updateDiscord("Changing Settings");
+				return new SettingsScreen(this);
+			case CONTROLS:
+				return new ControlsScreen(this);
+			case INTRO:
+				setLoadOnStart(false);
+				return new IntroScreen(this);
+			case LOSESCREEN:
+				return new LoseScreen(this);
+			case ENDCREDITS:
+				return new EndCreditsScreen(this);
+			case WINSCREEN:
+				return new WinScreen(this);
+			default:
+				return null;
+		}
+	}
 
-  public enum ScreenType {
-    MAIN_MENU, LOAD_GAME, MAIN_GAME, SETTINGS, CONTROLS, INTRO, LOSESCREEN, WINSCREEN, ENDCREDITS
-  }
+	private void updateDiscord(String activity) {
+		if (discordActivity != null) {
+			discordActivity.updateDiscordStatus(activity);
+			discordActivity.startTimer();
+		}
+	}
+
+	public enum ScreenType {
+		MAIN_MENU, LOAD_GAME, MAIN_GAME, SETTINGS, CONTROLS, INTRO, LOSESCREEN, WINSCREEN, ENDCREDITS
+	}
 
 
-
-  /**
-   * Exit the game.
-   */
-  public void exit() {
-    app.exit();
-  }
+	/**
+	 * Exit the game.
+	 */
+	public void exit() {
+		app.exit();
+	}
 }

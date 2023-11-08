@@ -1,10 +1,5 @@
 package com.csse3200.game.components.player;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
 import com.csse3200.game.areas.GameArea;
 import com.csse3200.game.components.combat.CombatStatsComponent;
 import com.csse3200.game.entities.Entity;
@@ -16,62 +11,67 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(GameExtension.class)
 class HungerComponentTest {
-    HungerComponent hungerComponent;
-    PlayerHungerService mockPlayerHungerService;
-    EventHandler mockEventHandler;
-    int INITIAL_HUNGER_LEVEL = 30;
-    @BeforeEach
-    void beforeEach() {
-        ServiceLocator.registerGameArea(mock(GameArea.class));
+	HungerComponent hungerComponent;
+	PlayerHungerService mockPlayerHungerService;
+	EventHandler mockEventHandler;
+	int INITIAL_HUNGER_LEVEL = 30;
 
-        hungerComponent = new HungerComponent(INITIAL_HUNGER_LEVEL);
+	@BeforeEach
+	void beforeEach() {
+		ServiceLocator.registerGameArea(mock(GameArea.class));
 
-        mockPlayerHungerService = mock(PlayerHungerService.class);
+		hungerComponent = new HungerComponent(INITIAL_HUNGER_LEVEL);
 
-        ServiceLocator.registerPlayerHungerService(mockPlayerHungerService);
+		mockPlayerHungerService = mock(PlayerHungerService.class);
 
-        mockEventHandler = mock(EventHandler.class);
+		ServiceLocator.registerPlayerHungerService(mockPlayerHungerService);
 
-        when(ServiceLocator.getPlayerHungerService().getEvents()).thenReturn(mockEventHandler);
-        when(ServiceLocator.getGameArea().getPlayer()).thenReturn(mock(Entity.class));
-        when(ServiceLocator.getGameArea().getPlayer().getComponent(CombatStatsComponent.class)).thenReturn(mock(CombatStatsComponent.class));
-    }
+		mockEventHandler = mock(EventHandler.class);
 
-    @Test
-    void shouldSetGetHunger() {
+		when(ServiceLocator.getPlayerHungerService().getEvents()).thenReturn(mockEventHandler);
+		when(ServiceLocator.getGameArea().getPlayer()).thenReturn(mock(Entity.class));
+		when(ServiceLocator.getGameArea().getPlayer().getComponent(CombatStatsComponent.class)).thenReturn(mock(CombatStatsComponent.class));
+	}
 
-        assertEquals(INITIAL_HUNGER_LEVEL, hungerComponent.getHungerLevel());
+	@Test
+	void shouldSetGetHunger() {
 
-        hungerComponent.setHungerLevel(5);
-        assertEquals(5, hungerComponent.getHungerLevel());
-    }
+		assertEquals(INITIAL_HUNGER_LEVEL, hungerComponent.getHungerLevel());
 
-    @Test
-    void checkIfStarving() {
-        hungerComponent.setHungerLevel(0);
-        assertTrue(hungerComponent.checkIfStarving());
+		hungerComponent.setHungerLevel(5);
+		assertEquals(5, hungerComponent.getHungerLevel());
+	}
 
-        hungerComponent.setHungerLevel(66);
-        assertFalse(hungerComponent.checkIfStarving());
-    }
+	@Test
+	void checkIfStarving() {
+		hungerComponent.setHungerLevel(0);
+		assertTrue(hungerComponent.checkIfStarving());
 
-    @Test
-    void testIncreaseHungerLevel() {
-        hungerComponent.increaseHungerLevel(1);
-        assertEquals(INITIAL_HUNGER_LEVEL - 1, hungerComponent.getHungerLevel());
+		hungerComponent.setHungerLevel(66);
+		assertFalse(hungerComponent.checkIfStarving());
+	}
 
-        hungerComponent.setHungerLevel(INITIAL_HUNGER_LEVEL);
-        hungerComponent.increaseHungerLevel(-1);
-        assertEquals(INITIAL_HUNGER_LEVEL + 1, hungerComponent.getHungerLevel());
+	@Test
+	void testIncreaseHungerLevel() {
+		hungerComponent.increaseHungerLevel(1);
+		assertEquals(INITIAL_HUNGER_LEVEL - 1, hungerComponent.getHungerLevel());
 
-        hungerComponent.setHungerLevel(0);
-        hungerComponent.increaseHungerLevel(1);
-        assertEquals(0, hungerComponent.getHungerLevel());
+		hungerComponent.setHungerLevel(INITIAL_HUNGER_LEVEL);
+		hungerComponent.increaseHungerLevel(-1);
+		assertEquals(INITIAL_HUNGER_LEVEL + 1, hungerComponent.getHungerLevel());
 
-        hungerComponent.setHungerLevel(100);
-        hungerComponent.increaseHungerLevel(-1);
-        assertEquals(100, hungerComponent.getHungerLevel());
-    }
+		hungerComponent.setHungerLevel(0);
+		hungerComponent.increaseHungerLevel(1);
+		assertEquals(0, hungerComponent.getHungerLevel());
+
+		hungerComponent.setHungerLevel(100);
+		hungerComponent.increaseHungerLevel(-1);
+		assertEquals(100, hungerComponent.getHungerLevel());
+	}
 }

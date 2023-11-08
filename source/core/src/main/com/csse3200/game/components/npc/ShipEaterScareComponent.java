@@ -10,9 +10,12 @@ import com.csse3200.game.services.sound.InvalidSoundFileException;
 
 public class ShipEaterScareComponent extends Component {
 
-	/** Entity's interaction detector */
+	/**
+	 * Entity's interaction detector
+	 */
 	protected InteractionDetector interactionDetector;
 	protected boolean isHiding;
+
 	@Override
 	public void create() {
 		interactionDetector = entity.getComponent(InteractionDetector.class);

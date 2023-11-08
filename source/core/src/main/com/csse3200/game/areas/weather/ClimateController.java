@@ -259,10 +259,14 @@ public class ClimateController implements Json.Serializable {
 				}
 
 				switch (name) {
-					case ("AcidShowerEvent") -> addWeatherEvent(new AcidShowerEvent(hoursUntil, duration, priority, severity));
-					case ("RainStormEvent") -> addWeatherEvent(new RainStormEvent(hoursUntil, duration, priority, severity));
-					case ("BlizzardEvent") -> addWeatherEvent(new BlizzardEvent(hoursUntil, duration, priority, severity));
-					case ("SolarSurgeEvent") -> addWeatherEvent(new SolarSurgeEvent(hoursUntil, duration, priority, severity));
+					case ("AcidShowerEvent") ->
+							addWeatherEvent(new AcidShowerEvent(hoursUntil, duration, priority, severity));
+					case ("RainStormEvent") ->
+							addWeatherEvent(new RainStormEvent(hoursUntil, duration, priority, severity));
+					case ("BlizzardEvent") ->
+							addWeatherEvent(new BlizzardEvent(hoursUntil, duration, priority, severity));
+					case ("SolarSurgeEvent") ->
+							addWeatherEvent(new SolarSurgeEvent(hoursUntil, duration, priority, severity));
 					default -> logger.error("Invalid weather event type while loading");
 				}
 			});

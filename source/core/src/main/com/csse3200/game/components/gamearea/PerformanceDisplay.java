@@ -50,7 +50,7 @@ public class PerformanceDisplay extends UIComponent {
 						.concat(String.format("PLAYER: (%.2f, %.2f)%n", position.x, position.y))
 						.concat(String.format("DAY: %d%n", ServiceLocator.getTimeService().getDay()))
 						.concat(String.format("TIME: %d: %d%n", ServiceLocator.getTimeService().getHour(),
-                                ServiceLocator.getTimeService().getMinute()));
+								ServiceLocator.getTimeService().getMinute()));
 		return message;
 	}
 

@@ -1,12 +1,11 @@
 package com.csse3200.game.ui.terminal.commands;
 
-import java.util.ArrayList;
-
 import com.csse3200.game.areas.weather.*;
+import com.csse3200.game.services.ServiceLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.csse3200.game.services.ServiceLocator;
+import java.util.ArrayList;
 
 public class AddWeatherCommand implements Command {
 
@@ -84,6 +83,7 @@ public class AddWeatherCommand implements Command {
 
 	/**
 	 * Determines whether the correct number of arguments were given
+	 *
 	 * @param args commands arguments
 	 * @return whether the number of arguments is valid or not
 	 */

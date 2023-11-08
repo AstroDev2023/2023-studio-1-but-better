@@ -5,19 +5,19 @@ package com.csse3200.game.entities.configs.plants;
  * loaded by the PlantFactory.
  */
 public class BasePlantConfig {
-    public int health = 0;
-    public String name = "none";
-    public String type = "none";
-    public String description = "none";
-    public float idealWaterLevel = 0;
-    public int adultLifeSpan = 0;
-    public int maxHealth = 0;
-    public String soundFolderPath = "";
+	public int health = 0;
+	public String name = "none";
+	public String type = "none";
+	public String description = "none";
+	public float idealWaterLevel = 0;
+	public int adultLifeSpan = 0;
+	public int maxHealth = 0;
+	public String soundFolderPath = "";
 
-    public int sproutThreshold = 0;
-    public int juvenileThreshold = 0;
-    public int adultThreshold = 0;
+	public int sproutThreshold = 0;
+	public int juvenileThreshold = 0;
+	public int adultThreshold = 0;
 
-    public String atlasPath = "";
-    public int oxygen = 0;
+	public String atlasPath = "";
+	public int oxygen = 0;
 }

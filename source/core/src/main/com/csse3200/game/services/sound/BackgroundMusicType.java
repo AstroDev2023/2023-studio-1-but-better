@@ -5,8 +5,8 @@ package com.csse3200.game.services.sound;
  * background tracks to be played at chosen times.
  */
 public enum BackgroundMusicType {
-    DAY,
-    NIGHT,
-    FIGHT,
-    NORMAL;
+	DAY,
+	NIGHT,
+	FIGHT,
+	NORMAL;
 }

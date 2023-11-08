@@ -20,7 +20,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,8 +77,8 @@ class ParticleEffectComponentTest {
 		when(iter.next()).thenReturn(wrapper);
 
 		Entity entity = mock(Entity.class);
-		when(entity.getCenterPosition()).thenReturn(new Vector2(1,1));
-		when(entity.getPosition()).thenReturn(new Vector2(0,0));
+		when(entity.getCenterPosition()).thenReturn(new Vector2(1, 1));
+		when(entity.getPosition()).thenReturn(new Vector2(0, 0));
 		entity.addComponent(component);
 		component.setEntity(entity);
 		component.render(batch, delta);

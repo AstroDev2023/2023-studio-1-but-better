@@ -8,37 +8,38 @@ import com.csse3200.game.missions.cutscenes.Cutscene;
  */
 public class DialogueReward extends Reward {
 
-    /**
-     * The {@link Cutscene} for dialogue to be displayed
-     */
-    private final Cutscene cutscene;
+	/**
+	 * The {@link Cutscene} for dialogue to be displayed
+	 */
+	private final Cutscene cutscene;
 
-    public DialogueReward(String dialogue, Cutscene.CutsceneType type) {
-        super();
-        this.cutscene = new Cutscene(dialogue, type);
-    }
+	public DialogueReward(String dialogue, Cutscene.CutsceneType type) {
+		super();
+		this.cutscene = new Cutscene(dialogue, type);
+	}
 
-    /**
-     * New {@link DialogueReward} object
-     * @param cutscene For collect method
-     */
-    public DialogueReward(Cutscene cutscene) {
-        this.cutscene = cutscene;
-    }
+	/**
+	 * New {@link DialogueReward} object
+	 *
+	 * @param cutscene For collect method
+	 */
+	public DialogueReward(Cutscene cutscene) {
+		this.cutscene = cutscene;
+	}
 
-    /**
-     * This method will display the dialogue on the correct dialogue screen
-     */
-    @Override
-    public void collect() {
-        setCollected();
-        cutscene.spawnCutscene();
-    }
+	/**
+	 * This method will display the dialogue on the correct dialogue screen
+	 */
+	@Override
+	public void collect() {
+		setCollected();
+		cutscene.spawnCutscene();
+	}
 
-    /**
-     * Getting the cutscene.
-     */
-    protected Cutscene getCutscene() {
-        return this.cutscene;
-    }
+	/**
+	 * Getting the cutscene.
+	 */
+	protected Cutscene getCutscene() {
+		return this.cutscene;
+	}
 }

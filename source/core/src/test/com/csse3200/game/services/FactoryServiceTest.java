@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FactoryServiceTest {
 
-    @Test
-    void getFactories() {
-        assertNotNull(FactoryService.getNpcFactories());
-        assertNotNull(FactoryService.getQuests());
-    }
+	@Test
+	void getFactories() {
+		assertNotNull(FactoryService.getNpcFactories());
+		assertNotNull(FactoryService.getQuests());
+	}
 }

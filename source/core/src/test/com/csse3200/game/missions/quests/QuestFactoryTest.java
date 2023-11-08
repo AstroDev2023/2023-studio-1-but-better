@@ -32,328 +32,329 @@ import static org.mockito.Mockito.*;
 
 class QuestFactoryTest {
 
-    @Mock
-    GameTime mockGameTime;
-    @Mock
-    TimeService mockTimeService;
-    @Mock
-    ResourceService mockResourceService;
-    @Mock
-    Texture mockTexture;
-    @Mock
-    Entity mockEntity;
-    @Mock
-    SpaceGameArea mockGameArea;
-    @Mock
-    TextureRenderComponent mockRenderComponent;
+	@Mock
+	GameTime mockGameTime;
+	@Mock
+	TimeService mockTimeService;
+	@Mock
+	ResourceService mockResourceService;
+	@Mock
+	Texture mockTexture;
+	@Mock
+	Entity mockEntity;
+	@Mock
+	SpaceGameArea mockGameArea;
+	@Mock
+	TextureRenderComponent mockRenderComponent;
 
-    @BeforeEach
-    public void init() {
-        Gdx.files = mock(Files.class);
-        Gdx.gl = mock(GL20.class);
-        MockitoAnnotations.openMocks(this);
-        ServiceLocator.registerTimeSource(mockGameTime);
-        ServiceLocator.registerTimeService(new TimeService());
-        ServiceLocator.registerMissionManager(new MissionManager());
-        ServiceLocator.registerPhysicsService(new PhysicsService());
-        ServiceLocator.registerResourceService(mockResourceService);
-        ServiceLocator.registerGameArea(mockGameArea);
+	@BeforeEach
+	public void init() {
+		Gdx.files = mock(Files.class);
+		Gdx.gl = mock(GL20.class);
+		MockitoAnnotations.openMocks(this);
+		ServiceLocator.registerTimeSource(mockGameTime);
+		ServiceLocator.registerTimeService(new TimeService());
+		ServiceLocator.registerMissionManager(new MissionManager());
+		ServiceLocator.registerPhysicsService(new PhysicsService());
+		ServiceLocator.registerResourceService(mockResourceService);
+		ServiceLocator.registerGameArea(mockGameArea);
 
-        ClimateController climateController = new ClimateController();
-        when(mockGameArea.getClimateController()).thenReturn(climateController);
+		ClimateController climateController = new ClimateController();
+		when(mockGameArea.getClimateController()).thenReturn(climateController);
 
-        when(mockResourceService.getAsset(any(), any())).thenReturn(mockTexture);
+		when(mockResourceService.getAsset(any(), any())).thenReturn(mockTexture);
 
-        Entity playerMock = mock(Entity.class);
-        InventoryComponent playerInventoryMock = mock(InventoryComponent.class);
-        when(playerInventoryMock.getItemCount(anyString())).thenReturn(0);
-        when(playerMock.getComponent(InventoryComponent.class)).thenReturn(playerInventoryMock);
-        when(mockGameArea.getPlayer()).thenReturn(playerMock);
+		Entity playerMock = mock(Entity.class);
+		InventoryComponent playerInventoryMock = mock(InventoryComponent.class);
+		when(playerInventoryMock.getItemCount(anyString())).thenReturn(0);
+		when(playerMock.getComponent(InventoryComponent.class)).thenReturn(playerInventoryMock);
+		when(mockGameArea.getPlayer()).thenReturn(playerMock);
 
-        TextureData mockTextureData = mock(TextureData.class);
-        doNothing().when(mockTexture).load(mockTextureData);
-    }
-    @AfterEach
-    public void reset() {
-        ServiceLocator.clear();
-    }
+		TextureData mockTextureData = mock(TextureData.class);
+		doNothing().when(mockTexture).load(mockTextureData);
+	}
 
-    @Test
-    void testCreateFirstContactQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createShovel).thenReturn(mockEntity);
+	@AfterEach
+	public void reset() {
+		ServiceLocator.clear();
+	}
 
-            Quest quest = QuestFactory.createFirstContactQuest();
-            assertEquals(QuestFactory.FIRST_CONTACT_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateFirstContactQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createShovel).thenReturn(mockEntity);
 
-    @Test
-    void testCreateClearingYourMessQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createCosmicCobSeed).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createHoe).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createFirstContactQuest();
+			assertEquals(QuestFactory.FIRST_CONTACT_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createClearingYourMessQuest();
-            assertEquals(QuestFactory.CLEARING_YOUR_MESS_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateClearingYourMessQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createCosmicCobSeed).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createHoe).thenReturn(mockEntity);
 
-    @Test
-    void testCreateSowingYourFirstSeedsQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createScythe).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createWateringcan).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createClearingYourMessQuest();
+			assertEquals(QuestFactory.CLEARING_YOUR_MESS_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createSowingYourFirstSeedsQuest();
-            assertEquals(QuestFactory.SOWING_YOUR_FIRST_SEEDS_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateSowingYourFirstSeedsQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createScythe).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createWateringcan).thenReturn(mockEntity);
 
-    @Test
-    void testCreateReapingYourRewardsQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createSprinklerItem).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createPumpItem).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createSowingYourFirstSeedsQuest();
+			assertEquals(QuestFactory.SOWING_YOUR_FIRST_SEEDS_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createReapingYourRewardsQuest();
-            assertEquals(QuestFactory.REAPING_YOUR_REWARDS_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateReapingYourRewardsQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createSprinklerItem).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createPumpItem).thenReturn(mockEntity);
 
-    @Test
-    void testCreateTractorQuest() {
-        try (MockedStatic<TractorFactory> tractorFactoryMockedStatic = mockStatic(TractorFactory.class)) {
-            tractorFactoryMockedStatic.when(TractorFactory::createTractor).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createReapingYourRewardsQuest();
+			assertEquals(QuestFactory.REAPING_YOUR_REWARDS_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            MissionCompleteQuest quest = QuestFactory.createTractorQuest();
-            assertEquals(QuestFactory.TRACTOR_GO_BRRRRRR, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateTractorQuest() {
+		try (MockedStatic<TractorFactory> tractorFactoryMockedStatic = mockStatic(TractorFactory.class)) {
+			tractorFactoryMockedStatic.when(TractorFactory::createTractor).thenReturn(mockEntity);
 
-    @Test
-    void testCreateMakingFriendsQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createFishingRod).thenReturn(mockEntity);
+			MissionCompleteQuest quest = QuestFactory.createTractorQuest();
+			assertEquals(QuestFactory.TRACTOR_GO_BRRRRRR, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createMakingFriendsQuest();
-            assertEquals(QuestFactory.MAKING_FRIENDS_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateMakingFriendsQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createFishingRod).thenReturn(mockEntity);
 
-    @Test
-    void testCreateFertilisingFiestaQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createSword).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createSpaceSnapperSeed).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createFenceItem).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createGateItem).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createMakingFriendsQuest();
+			assertEquals(QuestFactory.MAKING_FRIENDS_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            try (MockedStatic<NPCFactory> npcFactoryMockedStatic = mockStatic(NPCFactory.class)) {
-                npcFactoryMockedStatic.when(NPCFactory::createOxygenEater).thenReturn(mockEntity);
-                npcFactoryMockedStatic.when(NPCFactory::createBat).thenReturn(mockEntity);
-                npcFactoryMockedStatic.when(NPCFactory::createDragonfly).thenReturn(mockEntity);
+	@Test
+	void testCreateFertilisingFiestaQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createSword).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createSpaceSnapperSeed).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createFenceItem).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createGateItem).thenReturn(mockEntity);
 
-                Quest quest = QuestFactory.createFertilisingFiestaQuest();
-                assertEquals(QuestFactory.FERTILISING_FIESTA_QUEST_NAME, quest.getName());
-                assertFalse(quest.isCompleted());
-            } catch (Exception ignored) {
-                fail();
-            }
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+			try (MockedStatic<NPCFactory> npcFactoryMockedStatic = mockStatic(NPCFactory.class)) {
+				npcFactoryMockedStatic.when(NPCFactory::createOxygenEater).thenReturn(mockEntity);
+				npcFactoryMockedStatic.when(NPCFactory::createBat).thenReturn(mockEntity);
+				npcFactoryMockedStatic.when(NPCFactory::createDragonfly).thenReturn(mockEntity);
 
-    @Test
-    void testCreateAliensAttackQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createAloeVeraSeed).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createGun).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createHammerPlantSeed).thenReturn(mockEntity);
+				Quest quest = QuestFactory.createFertilisingFiestaQuest();
+				assertEquals(QuestFactory.FERTILISING_FIESTA_QUEST_NAME, quest.getName());
+				assertFalse(quest.isCompleted());
+			} catch (Exception ignored) {
+				fail();
+			}
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createAliensAttackQuest();
-            assertEquals(QuestFactory.ALIENS_ATTACK_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateAliensAttackQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createAloeVeraSeed).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createGun).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createHammerPlantSeed).thenReturn(mockEntity);
 
-    @Test
-    void testCreateActIMainQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createChestItem).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createLightItem).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createAliensAttackQuest();
+			assertEquals(QuestFactory.ALIENS_ATTACK_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createActIMainQuest();
-            assertEquals(QuestFactory.ACT_I_MAIN_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateActIMainQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createChestItem).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createLightItem).thenReturn(mockEntity);
 
-    @Test
-    void testCreateConnectionQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createDeadlyNightshadeSeed).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createActIMainQuest();
+			assertEquals(QuestFactory.ACT_I_MAIN_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createConnectionQuest();
-            assertEquals(QuestFactory.CONNECTION_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateConnectionQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createDeadlyNightshadeSeed).thenReturn(mockEntity);
 
-    @Test
-    void testCreateHomeSickQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createShipPart).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createConnectionQuest();
+			assertEquals(QuestFactory.CONNECTION_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createHomeSickQuest();
-            assertEquals(QuestFactory.HOME_SICK_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateHomeSickQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createShipPart).thenReturn(mockEntity);
 
-    @Test
-    void testCreateShipRepairsQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createClueItem).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createHomeSickQuest();
+			assertEquals(QuestFactory.HOME_SICK_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createShipRepairsQuest();
-            assertEquals(QuestFactory.SHIP_REPAIRS_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateShipRepairsQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createClueItem).thenReturn(mockEntity);
 
-    @Test
-    void testCreatePartFinderIQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createClueItem).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createShipRepairsQuest();
+			assertEquals(QuestFactory.SHIP_REPAIRS_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createPartFinderIQuest();
-            assertEquals(QuestFactory.PART_FINDER_I_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreatePartFinderIQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createClueItem).thenReturn(mockEntity);
 
-    @Test
-    void testCreateSpaceDebrisQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createShipPart).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createPartFinderIQuest();
+			assertEquals(QuestFactory.PART_FINDER_I_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createSpaceDebrisQuest();
-            assertEquals(QuestFactory.SPACE_DEBRIS_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateSpaceDebrisQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createShipPart).thenReturn(mockEntity);
 
-    @Test
-    void testCreateBringingItAllTogetherQuest() {
-        Quest quest = QuestFactory.createBringingItAllTogetherQuest();
-        assertEquals(QuestFactory.BRINGING_IT_ALL_TOGETHER_QUEST_NAME, quest.getName());
-        assertFalse(quest.isCompleted());
-    }
+			Quest quest = QuestFactory.createSpaceDebrisQuest();
+			assertEquals(QuestFactory.SPACE_DEBRIS_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-    @Test
-    void testCreateActIIMainQuest() {
-        Quest quest = QuestFactory.createActIIMainQuest();
-        assertEquals(QuestFactory.ACT_II_MAIN_QUEST_NAME, quest.getName());
-        assertFalse(quest.isCompleted());
-    }
+	@Test
+	void testCreateBringingItAllTogetherQuest() {
+		Quest quest = QuestFactory.createBringingItAllTogetherQuest();
+		assertEquals(QuestFactory.BRINGING_IT_ALL_TOGETHER_QUEST_NAME, quest.getName());
+		assertFalse(quest.isCompleted());
+	}
 
-    @Test
-    void testCreateAnImminentThreatQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createAtomicAlgaeSeed).thenReturn(mockEntity);
+	@Test
+	void testCreateActIIMainQuest() {
+		Quest quest = QuestFactory.createActIIMainQuest();
+		assertEquals(QuestFactory.ACT_II_MAIN_QUEST_NAME, quest.getName());
+		assertFalse(quest.isCompleted());
+	}
 
-            Quest quest = QuestFactory.createAnImminentThreatQuest();
-            assertEquals(QuestFactory.AN_IMMINENT_THREAT_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateAnImminentThreatQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createAtomicAlgaeSeed).thenReturn(mockEntity);
 
-    @Test
-    void testCreateAirAndAlgaeQuest() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createAtomicAlgaeSeed).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createAnImminentThreatQuest();
+			assertEquals(QuestFactory.AN_IMMINENT_THREAT_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-            Quest quest = QuestFactory.createAirAndAlgaeQuest();
-            assertEquals(QuestFactory.AIR_AND_ALGAE_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        } catch (Exception ignored) {
-            fail();
-        }
-    }
+	@Test
+	void testCreateAirAndAlgaeQuest() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createAtomicAlgaeSeed).thenReturn(mockEntity);
 
-    @Test
-    void testCreateStratosphericSentinelQuest() {
-        Quest quest = QuestFactory.createStratosphericSentinelQuest();
-        assertEquals(QuestFactory.STRATOSPHERIC_SENTINEL_QUEST_NAME, quest.getName());
-        assertFalse(quest.isCompleted());
-    }
+			Quest quest = QuestFactory.createAirAndAlgaeQuest();
+			assertEquals(QuestFactory.AIR_AND_ALGAE_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		} catch (Exception ignored) {
+			fail();
+		}
+	}
 
-    @Test
-    void testCreateActIIIMainQuest() {
-        Quest quest = QuestFactory.createActIIIMainQuest();
-        assertEquals(QuestFactory.ACT_III_MAIN_QUEST_NAME, quest.getName());
-        assertFalse(quest.isCompleted());
-    }
+	@Test
+	void testCreateStratosphericSentinelQuest() {
+		Quest quest = QuestFactory.createStratosphericSentinelQuest();
+		assertEquals(QuestFactory.STRATOSPHERIC_SENTINEL_QUEST_NAME, quest.getName());
+		assertFalse(quest.isCompleted());
+	}
 
-    @Test
-    void testCreateHaberHobbyist() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createFertiliser).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createSprinklerItem).thenReturn(mockEntity);
+	@Test
+	void testCreateActIIIMainQuest() {
+		Quest quest = QuestFactory.createActIIIMainQuest();
+		assertEquals(QuestFactory.ACT_III_MAIN_QUEST_NAME, quest.getName());
+		assertFalse(quest.isCompleted());
+	}
 
-            Quest quest = QuestFactory.createHaberHobbyist();
-            assertEquals(QuestFactory.HABER_HOBBYIST_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        }
-    }
+	@Test
+	void testCreateHaberHobbyist() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createFertiliser).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createSprinklerItem).thenReturn(mockEntity);
 
-    @Test
-    void testCreateFertiliserFanatic() {
-        try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
-            itemFactoryMockedStatic.when(ItemFactory::createFertiliser).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createSprinklerItem).thenReturn(mockEntity);
-            itemFactoryMockedStatic.when(ItemFactory::createAtomicAlgaeSeed).thenReturn(mockEntity);
+			Quest quest = QuestFactory.createHaberHobbyist();
+			assertEquals(QuestFactory.HABER_HOBBYIST_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		}
+	}
 
-            Quest quest = QuestFactory.createFertiliserFanatic();
-            assertEquals(QuestFactory.FERTILISER_FANATIC_QUEST_NAME, quest.getName());
-            assertFalse(quest.isCompleted());
-        }
-    }
+	@Test
+	void testCreateFertiliserFanatic() {
+		try (MockedStatic<ItemFactory> itemFactoryMockedStatic = mockStatic(ItemFactory.class)) {
+			itemFactoryMockedStatic.when(ItemFactory::createFertiliser).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createSprinklerItem).thenReturn(mockEntity);
+			itemFactoryMockedStatic.when(ItemFactory::createAtomicAlgaeSeed).thenReturn(mockEntity);
+
+			Quest quest = QuestFactory.createFertiliserFanatic();
+			assertEquals(QuestFactory.FERTILISER_FANATIC_QUEST_NAME, quest.getName());
+			assertFalse(quest.isCompleted());
+		}
+	}
 
 }

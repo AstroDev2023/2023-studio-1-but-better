@@ -3,8 +3,8 @@ package com.csse3200.game.components.combat.attackpatterns;
 import com.csse3200.game.areas.GameArea;
 import com.csse3200.game.areas.terrain.CropTileComponent;
 import com.csse3200.game.areas.weather.ClimateController;
-import com.csse3200.game.components.combat.CombatStatsComponent;
 import com.csse3200.game.components.InteractionDetector;
+import com.csse3200.game.components.combat.CombatStatsComponent;
 import com.csse3200.game.components.combat.ProjectileComponent;
 import com.csse3200.game.components.plants.PlantComponent;
 import com.csse3200.game.entities.Entity;
@@ -23,255 +23,252 @@ import com.csse3200.game.services.sound.SoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(GameExtension.class)
 class AttackPatternTest {
 
-    private AttackPatternComponent attackPatternComponent;
-    private Entity entity;
-    private InteractionDetector interactionDetector;
-    private GameTime gameTime;
-    private SoundService mockSound;
-
+	private AttackPatternComponent attackPatternComponent;
+	private Entity entity;
+	private InteractionDetector interactionDetector;
+	private GameTime gameTime;
+	private SoundService mockSound;
+
+
+	@BeforeEach
+	void setUp() {
+		// Set up mock game area and its climate controller
+		GameArea gameArea = mock(GameArea.class);
+		ClimateController climateController = new ClimateController();
+		when(gameArea.getClimateController()).thenReturn(climateController);
+		ServiceLocator.registerGameArea(gameArea);
+
+		// Set up game time
+		gameTime = mock(GameTime.class);
+		when(gameTime.getTime()).thenReturn(0L);
+		ServiceLocator.registerTimeSource(gameTime);
+		ServiceLocator.registerPhysicsService(new PhysicsService());
+		ServiceLocator.registerResourceService(mock(ResourceService.class));
+		mockSound = mock(SoundService.class);
+		ServiceLocator.registerSoundService(mockSound);
+
+		when(mockSound.getEffectsMusicService()).thenReturn(mock(EffectsMusicService.class));
+
+		// Plant stuff
+		ServiceLocator.registerTimeService(new TimeService());
+		ServiceLocator.registerPlantCommandService(new PlantCommandService());
+		ServiceLocator.registerPlantInfoService(mock(PlantInfoService.class));
+
+
+		interactionDetector = spy(new InteractionDetector(1.0f));
+		entity = new Entity()
+				.addComponent(interactionDetector)
+				.addComponent(new PhysicsComponent());
+
+		when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(new Entity()));
+	}
+
+	@Test
+	void testAttackLoopRuns() {
+		attackPatternComponent = spy(getAttackPatternComponent(null));
+		entity.addComponent(attackPatternComponent);
+		entity.create();
+
+		// start attack loop when entity is detected
+		entity.getEvents().trigger("entityDetected", mock(Entity.class));
+
+		// check runs attack
+		verify(attackPatternComponent, times(1)).attack();
+
+		// trigger more 9 attacks
+		for (int i = 0; i < 9; i++) {
+			when(gameTime.getTime()).thenReturn(1000L + 1000L * i);
+			entity.update();
+		}
+
+		// check runs attack 10 times
+		verify(attackPatternComponent, times(10)).attack();
+	}
 
+	@Test
+	void testOxygenEaterAttack() {
+		attackPatternComponent = spy(getAttackPatternComponent(EntityType.OXYGEN_EATER));
 
+		entity.addComponent(attackPatternComponent);
+		entity.create();
 
-    @BeforeEach
-    void setUp() {
-        // Set up mock game area and its climate controller
-        GameArea gameArea = mock(GameArea.class);
-        ClimateController climateController = new ClimateController();
-        when(gameArea.getClimateController()).thenReturn(climateController);
-        ServiceLocator.registerGameArea(gameArea);
+		// start attack loop when entity is detected
+		entity.getEvents().trigger("entityDetected", mock(Entity.class));
+		entity.update();
 
-        // Set up game time
-        gameTime = mock(GameTime.class);
-        when(gameTime.getTime()).thenReturn(0L);
-        ServiceLocator.registerTimeSource(gameTime);
-        ServiceLocator.registerPhysicsService(new PhysicsService());
-        ServiceLocator.registerResourceService(mock(ResourceService.class));
-        mockSound = mock(SoundService.class);
-        ServiceLocator.registerSoundService(mockSound);
+		// check attack starts before shoot
+		verify(attackPatternComponent, times(1)).attack();
 
-        when(mockSound.getEffectsMusicService()).thenReturn(mock(EffectsMusicService.class));
+		// check shoot by checking if entities are added to GameArea
+		verify(ServiceLocator.getGameArea(), times(0)).spawnEntity(any());
 
-        // Plant stuff
-        ServiceLocator.registerTimeService(new TimeService());
-        ServiceLocator.registerPlantCommandService(new PlantCommandService());
-        ServiceLocator.registerPlantInfoService(mock(PlantInfoService.class));
+		// wait for delay
+		when(gameTime.getTime()).thenReturn(200L);
+		entity.update();
 
+		// verify projectile spawns
+		verify(ServiceLocator.getGameArea(), times(1)).spawnEntity(any());
 
+		// pass 9 seconds, with entity exiting range after 3 seconds
+		for (int i = 0; i < 9; i++) {
+			when(gameTime.getTime()).thenReturn(1000L + 1000L * i);
+			if (i == 3) {
+				when(interactionDetector.getEntitiesInRange()).thenReturn(new ArrayList<>());
+			}
+			entity.update();
+		}
 
-        interactionDetector = spy(new InteractionDetector(1.0f));
-        entity = new Entity()
-                .addComponent(interactionDetector)
-                .addComponent(new PhysicsComponent());
+		// check only 3 more projectiles spawn
+		verify(ServiceLocator.getGameArea(), times(4)).spawnEntity(any());
+	}
 
-        when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(new Entity()));
-    }
+	@Test
+	void testDragonflyAttackPlayer() {
+		attackPatternComponent = spy(getAttackPatternComponent(EntityType.DRAGONFLY));
 
-    @Test
-    void testAttackLoopRuns() {
-        attackPatternComponent = spy(getAttackPatternComponent(null));
-        entity.addComponent(attackPatternComponent);
-        entity.create();
+		entity.addComponent(attackPatternComponent);
+		entity.create();
 
-        // start attack loop when entity is detected
-        entity.getEvents().trigger("entityDetected", mock(Entity.class));
+		Entity playerTarget = new Entity(EntityType.PLAYER);
+		Entity plantTarget = new Entity(EntityType.PLANT);
 
-        // check runs attack
-        verify(attackPatternComponent, times(1)).attack();
+		// Place it close enough to the plant
+		entity.setPosition(1f, 1f);
+		plantTarget.setPosition(1f, 1f);
 
-        // trigger more 9 attacks
-        for (int i = 0; i < 9; i++) {
-            when(gameTime.getTime()).thenReturn(1000L + 1000L * i);
-            entity.update();
-        }
+		when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(plantTarget, playerTarget));
 
-        // check runs attack 10 times
-        verify(attackPatternComponent, times(10)).attack();
-    }
+		// start attack loop when entity is detected
+		entity.getEvents().trigger("entityDetected", mock(Entity.class));
+		entity.update();
 
-    @Test
-    void testOxygenEaterAttack() {
-        attackPatternComponent = spy(getAttackPatternComponent(EntityType.OXYGEN_EATER));
+		// check attack starts before shoot
+		verify(attackPatternComponent, times(1)).attack();
 
-        entity.addComponent(attackPatternComponent);
-        entity.create();
+		// check shoot by checking if entities are added to GameArea
+		verify(ServiceLocator.getGameArea(), times(0)).spawnEntity(any());
 
-        // start attack loop when entity is detected
-        entity.getEvents().trigger("entityDetected", mock(Entity.class));
-        entity.update();
+		// wait for delay
+		when(gameTime.getTime()).thenReturn(500L);
+		entity.update();
 
-        // check attack starts before shoot
-        verify(attackPatternComponent, times(1)).attack();
+		// verify 3 projectiles spawn
+		verify(ServiceLocator.getGameArea(), times(3)).spawnEntity(any());
 
-        // check shoot by checking if entities are added to GameArea
-        verify(ServiceLocator.getGameArea(), times(0)).spawnEntity(any());
+		// pass 9 seconds, with entity exiting range after 3 seconds
+		for (int i = 0; i < 9; i++) {
+			when(gameTime.getTime()).thenReturn(1000L + 1000L * i);
+			if (i == 3) {
+				when(interactionDetector.getEntitiesInRange()).thenReturn(new ArrayList<>());
+			}
+			entity.update();
+		}
 
-        // wait for delay
-        when(gameTime.getTime()).thenReturn(200L);
-        entity.update();
+		// check only 9 more projectiles spawn
+		verify(ServiceLocator.getGameArea(), times(12)).spawnEntity(any());
 
-        // verify projectile spawns
-        verify(ServiceLocator.getGameArea(), times(1)).spawnEntity(any());
+	}
 
-        // pass 9 seconds, with entity exiting range after 3 seconds
-        for (int i = 0; i < 9; i++) {
-            when(gameTime.getTime()).thenReturn(1000L + 1000L * i);
-            if (i == 3) {
-                when(interactionDetector.getEntitiesInRange()).thenReturn(new ArrayList<>());
-            }
-            entity.update();
-        }
+	@Test
+	void testDragonflyAttackPlant() {
+		attackPatternComponent = spy(getAttackPatternComponent(EntityType.DRAGONFLY));
 
-        // check only 3 more projectiles spawn
-        verify(ServiceLocator.getGameArea(), times(4)).spawnEntity(any());
-    }
+		entity.addComponent(attackPatternComponent);
+		entity.create();
 
-    @Test
-    void testDragonflyAttackPlayer() {
-        attackPatternComponent = spy(getAttackPatternComponent(EntityType.DRAGONFLY));
+		Entity plantTarget = new Entity(EntityType.PLANT);
 
-        entity.addComponent(attackPatternComponent);
-        entity.create();
+		int[] growthStageThresholds = new int[]{1, 2, 3};
+		CropTileComponent mockCropTile = mock(CropTileComponent.class);
 
-        Entity playerTarget = new Entity(EntityType.PLAYER);
-        Entity plantTarget = new Entity(EntityType.PLANT);
+		PlantComponent plantComponent = new PlantComponent(500, "testPlant", "DEFENCE", "test " +
+				"plant", 1, 2, 1000, mockCropTile, growthStageThresholds);
 
-        // Place it close enough to the plant
-        entity.setPosition(1f, 1f);
-        plantTarget.setPosition(1f, 1f);
+		plantTarget.addComponent(plantComponent);
+		plantTarget.create();
 
-        when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(plantTarget, playerTarget));
+		int plantStartingHealth = plantComponent.getPlantHealth();
 
-        // start attack loop when entity is detected
-        entity.getEvents().trigger("entityDetected", mock(Entity.class));
-        entity.update();
+		// Place it close enough to the plant
+		entity.setPosition(1f, 1f);
+		plantTarget.setPosition(1f, 1f);
 
-        // check attack starts before shoot
-        verify(attackPatternComponent, times(1)).attack();
+		when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(plantTarget));
 
-        // check shoot by checking if entities are added to GameArea
-        verify(ServiceLocator.getGameArea(), times(0)).spawnEntity(any());
+		// start attack loop when entity is detected
+		entity.getEvents().trigger("entityDetected", plantTarget);
+		entity.update();
 
-        // wait for delay
-        when(gameTime.getTime()).thenReturn(500L);
-        entity.update();
+		assertTrue(plantStartingHealth > plantComponent.getPlantHealth());
 
-        // verify 3 projectiles spawn
-        verify(ServiceLocator.getGameArea(), times(3)).spawnEntity(any());
+	}
 
-        // pass 9 seconds, with entity exiting range after 3 seconds
-        for (int i = 0; i < 9; i++) {
-            when(gameTime.getTime()).thenReturn(1000L + 1000L * i);
-            if (i == 3) {
-                when(interactionDetector.getEntitiesInRange()).thenReturn(new ArrayList<>());
-            }
-            entity.update();
-        }
+	@Test
+	void testBatAttack() {
 
-        // check only 9 more projectiles spawn
-        verify(ServiceLocator.getGameArea(), times(12)).spawnEntity(any());
+		attackPatternComponent = spy(getAttackPatternComponent(EntityType.BAT));
 
-    }
+		entity.addComponent(attackPatternComponent);
+		entity.addComponent(new CombatStatsComponent(10, 10));
+		entity.create();
 
-    @Test
-    void testDragonflyAttackPlant() {
-        attackPatternComponent = spy(getAttackPatternComponent(EntityType.DRAGONFLY));
+		Entity target = new Entity(EntityType.PLAYER);
 
-        entity.addComponent(attackPatternComponent);
-        entity.create();
+		CombatStatsComponent combatStatsComponent = new CombatStatsComponent(100, 0);
+		target.addComponent(combatStatsComponent);
+		target.create();
 
-        Entity plantTarget = new Entity(EntityType.PLANT);
+		when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(target));
 
-        int[] growthStageThresholds = new int[]{1,2,3};
-        CropTileComponent mockCropTile = mock(CropTileComponent.class);
+		// start attack loop when entity is detected
+		entity.getEvents().trigger("entityDetected", target);
+		entity.update();
 
-        PlantComponent plantComponent = new PlantComponent(500, "testPlant", "DEFENCE", "test " +
-                "plant", 1, 2, 1000, mockCropTile, growthStageThresholds);
+		// check attack starts before shoot
+		verify(attackPatternComponent, times(1)).attack();
 
-        plantTarget.addComponent(plantComponent);
-        plantTarget.create();
+		assertEquals(90, target.getComponent(CombatStatsComponent.class).getHealth());
 
-        int plantStartingHealth = plantComponent.getPlantHealth();
+		when(interactionDetector.getEntitiesInRange()).thenReturn(new ArrayList<>());
 
-        // Place it close enough to the plant
-        entity.setPosition(1f, 1f);
-        plantTarget.setPosition(1f, 1f);
+		// wait for delay
+		when(gameTime.getTime()).thenReturn(1000L);
 
-        when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(plantTarget));
+		entity.update();
 
-        // start attack loop when entity is detected
-        entity.getEvents().trigger("entityDetected", plantTarget);
-        entity.update();
+	}
 
-        assertTrue(plantStartingHealth > plantComponent.getPlantHealth());
 
-    }
+	private AttackPatternComponent getAttackPatternComponent(EntityType type) {
+		if (type == EntityType.DRAGONFLY) {
+			return new DragonflyAttackPattern(1f, this::createMockProjectile);
+		} else if (type == EntityType.OXYGEN_EATER) {
+			return new OxygenEaterAttackPattern(1f, this::createMockProjectile);
+		} else if (type == EntityType.BAT) {
+			return new BatAttackPattern(1f);
+		}
 
-    @Test
-    void testBatAttack() {
+		return new AttackPatternComponent(1f);
+	}
 
-        attackPatternComponent = spy(getAttackPatternComponent(EntityType.BAT));
+	private Entity createMockProjectile() {
+		Entity projectile = new Entity()
+				.addComponent(new PhysicsComponent())
+				.addComponent(new ProjectileComponent(1f));
 
-        entity.addComponent(attackPatternComponent);
-        entity.addComponent(new CombatStatsComponent(10, 10));
-        entity.create();
+		projectile.create();
 
-        Entity target = new Entity(EntityType.PLAYER);
-
-        CombatStatsComponent combatStatsComponent = new CombatStatsComponent(100, 0);
-        target.addComponent(combatStatsComponent);
-        target.create();
-
-        when(interactionDetector.getEntitiesInRange()).thenReturn(List.of(target));
-
-        // start attack loop when entity is detected
-        entity.getEvents().trigger("entityDetected", target);
-        entity.update();
-
-        // check attack starts before shoot
-        verify(attackPatternComponent, times(1)).attack();
-
-        assertEquals(90, target.getComponent(CombatStatsComponent.class).getHealth());
-
-        when(interactionDetector.getEntitiesInRange()).thenReturn(new ArrayList<>());
-
-        // wait for delay
-        when(gameTime.getTime()).thenReturn(1000L);
-
-        entity.update();
-
-    }
-
-
-    private AttackPatternComponent getAttackPatternComponent(EntityType type) {
-        if (type == EntityType.DRAGONFLY) {
-            return new DragonflyAttackPattern(1f, this::createMockProjectile);
-        } else if (type == EntityType.OXYGEN_EATER) {
-            return new OxygenEaterAttackPattern(1f, this::createMockProjectile);
-        }  else if (type == EntityType.BAT) {
-        return new BatAttackPattern(1f);
-    }
-
-        return new AttackPatternComponent(1f);
-    }
-
-    private Entity createMockProjectile() {
-        Entity projectile = new Entity()
-                .addComponent(new PhysicsComponent())
-                .addComponent(new ProjectileComponent(1f));
-
-        projectile.create();
-
-        return projectile;
-    }
+		return projectile;
+	}
 }

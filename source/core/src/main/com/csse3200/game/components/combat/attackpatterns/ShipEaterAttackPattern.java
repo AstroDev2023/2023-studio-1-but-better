@@ -16,90 +16,91 @@ import com.csse3200.game.services.sound.InvalidSoundFileException;
  * Adapted from Team 4's AttackPatternComponent.
  */
 public class ShipEaterAttackPattern extends Component {
-    private InteractionDetector interactionDetector;
-    private ScheduledEvent currentAttackEvent;
-    private final float attackFrequency;
-    private boolean isHiding;
-    private boolean isAttacking;
+	private InteractionDetector interactionDetector;
+	private ScheduledEvent currentAttackEvent;
+	private final float attackFrequency;
+	private boolean isHiding;
+	private boolean isAttacking;
 
-    public ShipEaterAttackPattern(float attackFrequency) {
-        this.attackFrequency = attackFrequency;
-    }
+	public ShipEaterAttackPattern(float attackFrequency) {
+		this.attackFrequency = attackFrequency;
+	}
 
-    @Override
-    public void create() {
-        interactionDetector = entity.getComponent(InteractionDetector.class);
-        interactionDetector.notifyOnDetection(true);
+	@Override
+	public void create() {
+		interactionDetector = entity.getComponent(InteractionDetector.class);
+		interactionDetector.notifyOnDetection(true);
 
-        entity.getEvents().addListener("entityDetected", (Entity e) -> setAttacking(e, true));
-        entity.getEvents().addListener("entityExitDetected", (Entity e) -> setAttacking(e, false));
-        entity.getEvents().addListener("hidingUpdated", this::setHiding);
-    }
+		entity.getEvents().addListener("entityDetected", (Entity e) -> setAttacking(e, true));
+		entity.getEvents().addListener("entityExitDetected", (Entity e) -> setAttacking(e, false));
+		entity.getEvents().addListener("hidingUpdated", this::setHiding);
+	}
 
-    private void setAttacking(Entity entity, boolean isAttacking) {
-        if (entity.getType() != EntityType.SHIP) return;
+	private void setAttacking(Entity entity, boolean isAttacking) {
+		if (entity.getType() != EntityType.SHIP) return;
 
-        this.isAttacking = isAttacking;
-        if (isAttacking) {
-            startAttack();
-        }
-    }
-    private void setHiding(boolean isHiding) {
-        this.isHiding = isHiding;
-    }
+		this.isAttacking = isAttacking;
+		if (isAttacking) {
+			startAttack();
+		}
+	}
 
-    /**
-     * Initiates an attack loop.
-     */
-    protected void startAttack() {
-        if (currentAttackEvent == null) { // attack loop not started
-            attack();
-        }
-    }
+	private void setHiding(boolean isHiding) {
+		this.isHiding = isHiding;
+	}
 
-    /**
-     * Performs the attack action, which involves determining the nearest entity, changing direction,
-     * triggering attack events, and scheduling the next attack.
-     */
-    protected void attack() {
-        Entity shipEntity = interactionDetector.getEntitiesInRange()
-                .stream().filter(entity -> entity.getType() == EntityType.SHIP)
-                .findAny().orElse(null);
+	/**
+	 * Initiates an attack loop.
+	 */
+	protected void startAttack() {
+		if (currentAttackEvent == null) { // attack loop not started
+			attack();
+		}
+	}
 
-        if (shipEntity == null || isHiding) {
-            // no ship detected or player is near, clear attack loop
-            currentAttackEvent = null;
-            entity.getEvents().trigger("eatingUpdated", false);
-            return;
-        }
+	/**
+	 * Performs the attack action, which involves determining the nearest entity, changing direction,
+	 * triggering attack events, and scheduling the next attack.
+	 */
+	protected void attack() {
+		Entity shipEntity = interactionDetector.getEntitiesInRange()
+				.stream().filter(entity -> entity.getType() == EntityType.SHIP)
+				.findAny().orElse(null);
 
-        float distanceToShip = entity.getCenterPosition().dst(shipEntity.getCenterPosition());
-        if (distanceToShip >= 2f) {
-            // too far away, don't start eating
-            currentAttackEvent = null;
-            return;
-        }
+		if (shipEntity == null || isHiding) {
+			// no ship detected or player is near, clear attack loop
+			currentAttackEvent = null;
+			entity.getEvents().trigger("eatingUpdated", false);
+			return;
+		}
 
-        entity.getEvents().trigger("eatingUpdated", true);
+		float distanceToShip = entity.getCenterPosition().dst(shipEntity.getCenterPosition());
+		if (distanceToShip >= 2f) {
+			// too far away, don't start eating
+			currentAttackEvent = null;
+			return;
+		}
 
-        // reduce the ship's repair state by 1
-        shipEntity.getEvents().trigger(ShipFactory.events.REMOVE_PART.name(), 1);
+		entity.getEvents().trigger("eatingUpdated", true);
 
-        try {
-            ServiceLocator.getSoundService().getEffectsMusicService().play(EffectSoundFile.SHIP_EATER_ATTACK);
-        } catch (InvalidSoundFileException ignored) {
+		// reduce the ship's repair state by 1
+		shipEntity.getEvents().trigger(ShipFactory.events.REMOVE_PART.name(), 1);
 
-        }
+		try {
+			ServiceLocator.getSoundService().getEffectsMusicService().play(EffectSoundFile.SHIP_EATER_ATTACK);
+		} catch (InvalidSoundFileException ignored) {
 
-        currentAttackEvent = entity.getEvents().scheduleEvent(attackFrequency, "attack");
-    }
+		}
 
-    @Override
-    public void update() {
-        if (currentAttackEvent == null && isAttacking && !isHiding) {
-            // stopped hiding, go back to attacking
-            attack();
-        }
-    }
+		currentAttackEvent = entity.getEvents().scheduleEvent(attackFrequency, "attack");
+	}
+
+	@Override
+	public void update() {
+		if (currentAttackEvent == null && isAttacking && !isHiding) {
+			// stopped hiding, go back to attacking
+			attack();
+		}
+	}
 
 }

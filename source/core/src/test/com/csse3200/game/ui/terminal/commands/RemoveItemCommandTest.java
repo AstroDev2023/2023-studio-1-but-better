@@ -50,7 +50,7 @@ class RemoveItemCommandTest {
 		try (MockedStatic<ItemFactory> factory = mockStatic(ItemFactory.class)) {
 			args.add("hoe");
 			Entity hoe = new Entity();
-            inventoryComponent.addItem(hoe);
+			inventoryComponent.addItem(hoe);
 			factory.when(ItemFactory::createHoe).thenReturn(hoe);
 			command.action(args);
 			verify(inventoryComponent).removeItem(hoe);
@@ -62,8 +62,8 @@ class RemoveItemCommandTest {
 		try (MockedStatic<ItemFactory> factory = mockStatic(ItemFactory.class)) {
 			args.add("can");
 			Entity can = new Entity();
-            inventoryComponent.addItem(can);
-            factory.when(ItemFactory::createWateringcan).thenReturn(can);
+			inventoryComponent.addItem(can);
+			factory.when(ItemFactory::createWateringcan).thenReturn(can);
 			command.action(args);
 			verify(inventoryComponent).removeItem(can);
 		}
@@ -74,8 +74,8 @@ class RemoveItemCommandTest {
 		try (MockedStatic<ItemFactory> factory = mockStatic(ItemFactory.class)) {
 			args.add("shovel");
 			Entity shovel = new Entity();
-            inventoryComponent.addItem(shovel);
-            factory.when(ItemFactory::createShovel).thenReturn(shovel);
+			inventoryComponent.addItem(shovel);
+			factory.when(ItemFactory::createShovel).thenReturn(shovel);
 			command.action(args);
 			verify(inventoryComponent).removeItem(shovel);
 		}
@@ -86,8 +86,8 @@ class RemoveItemCommandTest {
 		try (MockedStatic<ItemFactory> factory = mockStatic(ItemFactory.class)) {
 			args.add("scythe");
 			Entity scythe = new Entity();
-            inventoryComponent.addItem(scythe);
-            factory.when(ItemFactory::createScythe).thenReturn(scythe);
+			inventoryComponent.addItem(scythe);
+			factory.when(ItemFactory::createScythe).thenReturn(scythe);
 			command.action(args);
 			verify(inventoryComponent).removeItem(scythe);
 		}

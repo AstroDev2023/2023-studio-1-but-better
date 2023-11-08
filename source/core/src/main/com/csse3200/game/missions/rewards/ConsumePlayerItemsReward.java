@@ -12,41 +12,41 @@ import java.util.Map;
  */
 public class ConsumePlayerItemsReward extends Reward {
 
-    /**
-     * A {@link Map} mapping item names to item quantities, representing the names of items to remove, and the quantity
-     * of that item to remove.
-     */
-    private final Map<String, Integer> itemsToRemove;
+	/**
+	 * A {@link Map} mapping item names to item quantities, representing the names of items to remove, and the quantity
+	 * of that item to remove.
+	 */
+	private final Map<String, Integer> itemsToRemove;
 
-    /**
-     * Creates a {@link ConsumePlayerItemsReward} reward, which, when collected, removes a specified number of items
-     * from the player's inventory.
-     *
-     * @param toRemove A {@link Map} mapping item names to item quantities, representing the names of items to remove,
-     *                 and the quantity of that item to remove.
-     */
-    public ConsumePlayerItemsReward(Map<String, Integer> toRemove) {
-        this.itemsToRemove = toRemove;
-    }
+	/**
+	 * Creates a {@link ConsumePlayerItemsReward} reward, which, when collected, removes a specified number of items
+	 * from the player's inventory.
+	 *
+	 * @param toRemove A {@link Map} mapping item names to item quantities, representing the names of items to remove,
+	 *                 and the quantity of that item to remove.
+	 */
+	public ConsumePlayerItemsReward(Map<String, Integer> toRemove) {
+		this.itemsToRemove = toRemove;
+	}
 
-    /**
-     * When called, changes the isCollected variable to true and removes the specified items to the player's inventory.
-     */
-    @Override
-    public void collect() {
-        Entity player = ServiceLocator.getGameArea().getPlayer();
-        InventoryComponent inventory = player.getComponent(InventoryComponent.class);
-        if (inventory == null) {
-            return;
-        }
+	/**
+	 * When called, changes the isCollected variable to true and removes the specified items to the player's inventory.
+	 */
+	@Override
+	public void collect() {
+		Entity player = ServiceLocator.getGameArea().getPlayer();
+		InventoryComponent inventory = player.getComponent(InventoryComponent.class);
+		if (inventory == null) {
+			return;
+		}
 
-        setCollected();
-        
-        for (Map.Entry<String, Integer> itemQuantity : itemsToRemove.entrySet()) {
-            for (int i = 0; i < itemQuantity.getValue(); i++) {
-                inventory.removeItem(itemQuantity.getKey());
-            }
-        }
-    }
+		setCollected();
+
+		for (Map.Entry<String, Integer> itemQuantity : itemsToRemove.entrySet()) {
+			for (int i = 0; i < itemQuantity.getValue(); i++) {
+				inventory.removeItem(itemQuantity.getKey());
+			}
+		}
+	}
 
 }

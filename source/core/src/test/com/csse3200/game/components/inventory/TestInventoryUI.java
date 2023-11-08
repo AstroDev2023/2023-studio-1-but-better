@@ -52,7 +52,6 @@ import static org.mockito.Mockito.*;
  * the properties stores in 'PlayerConfig'.
  */
 @ExtendWith(GameExtension.class)
-
 class TestInventoryUI {
 	Entity player;
 	InventoryDisplay inventoryDisplay;
@@ -124,6 +123,7 @@ class TestInventoryUI {
 						.addComponent(inventoryDisplay)
 						.addComponent(inventory);
 	}
+
 	@Test
 	void testToggleInventory() {
 		player.create();
@@ -167,7 +167,7 @@ class TestInventoryUI {
 		for (Cell<?> slot : cells) {
 			if (i < 10) {
 				i++;
-				assert ((Label) slot.getActor()).getText().replace(" ","").toString().equals(Integer.toString(i % 10));
+				assert ((Label) slot.getActor()).getText().replace(" ", "").toString().equals(Integer.toString(i % 10));
 				continue;
 			}
 			assert ((ItemSlot) slot.getActor()).getChild(0) instanceof ItemFrame;

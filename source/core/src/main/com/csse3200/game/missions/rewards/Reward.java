@@ -9,23 +9,23 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public abstract class Reward {
 
-    private boolean isCollected;
+	private boolean isCollected;
 
-    protected Reward() {
-        isCollected = false;
-    }
+	protected Reward() {
+		isCollected = false;
+	}
 
-    public boolean isCollected() {
-        return isCollected;
-    }
+	public boolean isCollected() {
+		return isCollected;
+	}
 
-    public void setCollected() {
-        isCollected = true;
-    }
+	public void setCollected() {
+		isCollected = true;
+	}
 
-    public abstract void collect();
+	public abstract void collect();
 
-    public void read(JsonValue jsonValue) {
-        isCollected = jsonValue.getBoolean("collected");
-    }
+	public void read(JsonValue jsonValue) {
+		isCollected = jsonValue.getBoolean("collected");
+	}
 }

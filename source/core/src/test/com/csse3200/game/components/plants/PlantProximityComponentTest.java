@@ -14,25 +14,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @ExtendWith(GameExtension.class)
 class PlantProximityComponentTest {
-    PlantProximityComponent plantProximityComponent;
+	PlantProximityComponent plantProximityComponent;
 
-    @Mock
-    Entity entity;
+	@Mock
+	Entity entity;
 
-    /**
-     * Sets up the test environment before each test case.
-     */
-    @BeforeEach
-    void setUp() {
-        plantProximityComponent = new PlantProximityComponent();
-        plantProximityComponent.setEntity(entity);
-    }
+	/**
+	 * Sets up the test environment before each test case.
+	 */
+	@BeforeEach
+	void setUp() {
+		plantProximityComponent = new PlantProximityComponent();
+		plantProximityComponent.setEntity(entity);
+	}
 
-    /**
-     * Checks whether the initial radius is set to the expected value.
-     */
-    @Test
-    void testConstructor() {
-        assertEquals(8f, plantProximityComponent.getRadius());
-    }
+	/**
+	 * Checks whether the initial radius is set to the expected value.
+	 */
+	@Test
+	void testConstructor() {
+		assertEquals(8f, plantProximityComponent.getRadius());
+	}
 }

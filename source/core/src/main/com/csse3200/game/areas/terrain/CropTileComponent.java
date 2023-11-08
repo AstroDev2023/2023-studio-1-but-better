@@ -1,7 +1,5 @@
 package com.csse3200.game.areas.terrain;
 
-import java.util.function.Function;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -12,6 +10,8 @@ import com.csse3200.game.missions.MissionManager;
 import com.csse3200.game.rendering.DynamicTextureRenderComponent;
 import com.csse3200.game.services.FactoryService;
 import com.csse3200.game.services.ServiceLocator;
+
+import java.util.function.Function;
 
 /**
  * Component which stores information about plots of land on which crops and
@@ -147,6 +147,7 @@ public class CropTileComponent extends Component {
 
 	/**
 	 * Returns whether the tile is fertilised.
+	 *
 	 * @return True if the tile is fertilised, false otherwise.
 	 */
 	public boolean isFertilised() {
@@ -203,9 +204,9 @@ public class CropTileComponent extends Component {
 	 * tile, and whether it is fertilised.
 	 *
 	 * @return The calculated growth rate of the tile with an ideal water content
-	 *         value of 1, which is
-	 *         dependent on water content, soil quality, and whether the tile has
-	 *         been fertilised.
+	 * value of 1, which is
+	 * dependent on water content, soil quality, and whether the tile has
+	 * been fertilised.
 	 */
 	public double getGrowthRate() {
 		return getGrowthRate(1.0f);
@@ -220,8 +221,8 @@ public class CropTileComponent extends Component {
 	 *
 	 * @param idealWaterAmount The amount which yields the maximum growth rate.
 	 * @return The calculated growth rate of the tile, dependent on water content,
-	 *         soil quality, and
-	 *         whether the tile has been fertilised.
+	 * soil quality, and
+	 * whether the tile has been fertilised.
 	 */
 	public double getGrowthRate(float idealWaterAmount) {
 		double waterMultiplier = 1 / (Math.exp(
@@ -259,9 +260,9 @@ public class CropTileComponent extends Component {
 	 * Determine the appropriate String for the tile's texture based on fertiliser
 	 * status and
 	 * water content.
-	 * 
+	 *
 	 * @return the path to the texture for this CropTileComponent based on its
-	 *         status.
+	 * status.
 	 */
 	private String getTexturePath() {
 		String path;
@@ -291,6 +292,7 @@ public class CropTileComponent extends Component {
 
 	/**
 	 * Only to be used for loading as it can go around the achievement stuff
+	 *
 	 * @param plant - the plant to set here
 	 */
 	public void setPlant(Entity plant) {
@@ -313,7 +315,7 @@ public class CropTileComponent extends Component {
 	 * Writes in json summary of croptile state. Writes to json
 	 * the waterContent, soilQuality, isFertilised and plant
 	 * to the json
-	 * 
+	 *
 	 * @param json which is a valid Json
 	 */
 	@Override

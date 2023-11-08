@@ -10,30 +10,31 @@ import java.util.List;
  */
 public class TriggerWeatherReward extends Reward {
 
-    /**
-     * WeatherEvents to be added to the ClimateController
-     */
-    private final List<WeatherEvent> weatherEvents;
+	/**
+	 * WeatherEvents to be added to the ClimateController
+	 */
+	private final List<WeatherEvent> weatherEvents;
 
-    /**
-     * A TriggerWeatherReward with a list of WeatherEvent objects.
-     * @param weatherEvents - WeatherEvents to be added to the ClimateController.
-     */
-    public TriggerWeatherReward(List<WeatherEvent> weatherEvents) {
-        super();
-        this.weatherEvents = weatherEvents;
-    }
+	/**
+	 * A TriggerWeatherReward with a list of WeatherEvent objects.
+	 *
+	 * @param weatherEvents - WeatherEvents to be added to the ClimateController.
+	 */
+	public TriggerWeatherReward(List<WeatherEvent> weatherEvents) {
+		super();
+		this.weatherEvents = weatherEvents;
+	}
 
-    /**
-     * Adds each event from the list of weatherEvents to the ClimateController and sets the TriggerWeatherRewards as
-     * collected.
-     */
-    @Override
-    public void collect() {
-        setCollected();
-        for (WeatherEvent weatherEvent : weatherEvents) {
-            ServiceLocator.getGameArea().getClimateController().addWeatherEvent(weatherEvent);
-        }
-    }
+	/**
+	 * Adds each event from the list of weatherEvents to the ClimateController and sets the TriggerWeatherRewards as
+	 * collected.
+	 */
+	@Override
+	public void collect() {
+		setCollected();
+		for (WeatherEvent weatherEvent : weatherEvents) {
+			ServiceLocator.getGameArea().getClimateController().addWeatherEvent(weatherEvent);
+		}
+	}
 
 }

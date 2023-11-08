@@ -1,13 +1,13 @@
 package com.csse3200.game.components.ship;
 
-import java.util.Set;
-
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.csse3200.game.components.Component;
 import com.csse3200.game.components.ship.ShipProgressComponent.Feature;
 import com.csse3200.game.entities.factories.ShipFactory;
 import com.csse3200.game.rendering.AnimationRenderComponent;
+
+import java.util.Set;
 
 /**
  * the ShipAnimationController

@@ -8,13 +8,13 @@ import com.csse3200.game.services.ServiceLocator;
  */
 public class WinReward extends Reward {
 
-    /**
-     * Will trigger the winScreen event in the {@link MissionManager}
-     */
-    @Override
-    public void collect() {
-        setCollected();
-        ServiceLocator.getMissionManager().getEvents().trigger("winScreen");
-    }
+	/**
+	 * Will trigger the winScreen event in the {@link MissionManager}
+	 */
+	@Override
+	public void collect() {
+		setCollected();
+		ServiceLocator.getMissionManager().getEvents().trigger("winScreen");
+	}
 
 }

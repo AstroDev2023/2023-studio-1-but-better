@@ -19,81 +19,83 @@ import com.csse3200.game.physics.components.PhysicsComponent;
  * if target entity has a PhysicsComponent.
  */
 public class TouchAttackComponent extends Component {
-  private short targetLayer;
-  private float knockbackForce = 0f;
-  private HitboxComponent hitboxComponent;
-  private float stunDuration = 0f;
+	private short targetLayer;
+	private float knockbackForce = 0f;
+	private HitboxComponent hitboxComponent;
+	private float stunDuration = 0f;
 
-  /**
-   * Create a component which attacks entities on collision, without knockback.
-   * @param targetLayer The physics layer of the target's collider.
-   */
-  public TouchAttackComponent(short targetLayer) {
-    this.targetLayer = targetLayer;
-  }
+	/**
+	 * Create a component which attacks entities on collision, without knockback.
+	 *
+	 * @param targetLayer The physics layer of the target's collider.
+	 */
+	public TouchAttackComponent(short targetLayer) {
+		this.targetLayer = targetLayer;
+	}
 
-  /**
-   * Create a component which attacks entities on collision, with knockback.
-   * @param targetLayer The physics layer of the target's collider.
-   * @param knockback The magnitude of the knockback applied to the entity.
-   */
-  public TouchAttackComponent(short targetLayer, float knockback) {
-    this.targetLayer = targetLayer;
-    this.knockbackForce = knockback;
-  }
+	/**
+	 * Create a component which attacks entities on collision, with knockback.
+	 *
+	 * @param targetLayer The physics layer of the target's collider.
+	 * @param knockback   The magnitude of the knockback applied to the entity.
+	 */
+	public TouchAttackComponent(short targetLayer, float knockback) {
+		this.targetLayer = targetLayer;
+		this.knockbackForce = knockback;
+	}
 
-  public TouchAttackComponent(short targetLayer, float knockback, float stunDuration) {
-    this(targetLayer, knockback);
-    this.stunDuration = stunDuration;
-  }
+	public TouchAttackComponent(short targetLayer, float knockback, float stunDuration) {
+		this(targetLayer, knockback);
+		this.stunDuration = stunDuration;
+	}
 
-  @Override
-  public void create() {
-    entity.getEvents().addListener("collisionStart", this::onCollisionStart);
-    hitboxComponent = entity.getComponent(HitboxComponent.class);
-  }
+	@Override
+	public void create() {
+		entity.getEvents().addListener("collisionStart", this::onCollisionStart);
+		hitboxComponent = entity.getComponent(HitboxComponent.class);
+	}
 
-  private void onCollisionStart(Fixture me, Fixture other) {
-    if (!enabled) {
-      return;
-    }
+	private void onCollisionStart(Fixture me, Fixture other) {
+		if (!enabled) {
+			return;
+		}
 
-    if (hitboxComponent.getFixture() != me) {
-      // Not triggered by hitbox, ignore
-      return;
-    }
+		if (hitboxComponent.getFixture() != me) {
+			// Not triggered by hitbox, ignore
+			return;
+		}
 
-    if (!PhysicsLayer.contains(targetLayer, other.getFilterData().categoryBits)) {
-      // Doesn't match our target layer, ignore
-      return;
-    }
+		if (!PhysicsLayer.contains(targetLayer, other.getFilterData().categoryBits)) {
+			// Doesn't match our target layer, ignore
+			return;
+		}
 
-    // Try to attack target.
-    Entity target = ((BodyUserData) other.getBody().getUserData()).entity;
+		// Try to attack target.
+		Entity target = ((BodyUserData) other.getBody().getUserData()).entity;
 
-    // Apply knockback
-    ProjectileComponent projectileComponent = entity.getComponent(ProjectileComponent.class);
-    PhysicsComponent physicsComponent = target.getComponent(PhysicsComponent.class);
-    Vector2 knockBackDirection;
-    if (physicsComponent != null && knockbackForce > 0f) {
-      if (projectileComponent != null) {
-        knockBackDirection = projectileComponent.getVelocity();
-      } else {
-        knockBackDirection = target.getCenterPosition().sub(entity.getCenterPosition());
-      }
+		// Apply knockback
+		ProjectileComponent projectileComponent = entity.getComponent(ProjectileComponent.class);
+		PhysicsComponent physicsComponent = target.getComponent(PhysicsComponent.class);
+		Vector2 knockBackDirection;
+		if (physicsComponent != null && knockbackForce > 0f) {
+			if (projectileComponent != null) {
+				knockBackDirection = projectileComponent.getVelocity();
+			} else {
+				knockBackDirection = target.getCenterPosition().sub(entity.getCenterPosition());
+			}
 
-      Body targetBody = physicsComponent.getBody();
-      targetBody.setLinearVelocity(0,  0);
-      Vector2 impulse = knockBackDirection.setLength(knockbackForce);
-      targetBody.applyLinearImpulse(impulse, targetBody.getWorldCenter(), true);
-    }
+			Body targetBody = physicsComponent.getBody();
+			targetBody.setLinearVelocity(0, 0);
+			Vector2 impulse = knockBackDirection.setLength(knockbackForce);
+			targetBody.applyLinearImpulse(impulse, targetBody.getWorldCenter(), true);
+		}
 
-    if (entity.getComponent(ProjectileComponent.class) != null) {
-      entity.getEvents().trigger("impactStart");
-    }
+		if (entity.getComponent(ProjectileComponent.class) != null) {
+			entity.getEvents().trigger("impactStart");
+		}
 
-    target.getEvents().trigger("hit", entity);
-    target.getEvents().trigger("triggerStunDuration", stunDuration);
-    target.getEvents().trigger("panicStart");
-  }
+		target.getEvents().trigger("hit", entity);
+		target.getEvents().trigger("triggerStunDuration", stunDuration);
+		target.getEvents().trigger("panicStart");
+	}
 }

@@ -39,7 +39,7 @@ public abstract class Quest extends Mission {
 	 * Creates a {@link Quest} with the given {@link String} name, specifying the {@link Reward} for completion.
 	 * {@link Quest}s created using this constructor cannot expire.
 	 *
-	 * @param name The {@link String} name of the {@link Quest}, visible to the player in-game
+	 * @param name   The {@link String} name of the {@link Quest}, visible to the player in-game
 	 * @param reward The {@link Reward} which can be collected upon completion of the {@link Quest}
 	 */
 	protected Quest(String name, Reward reward) {
@@ -59,11 +59,11 @@ public abstract class Quest extends Mission {
 	 * {@link Quest} is mandatory. {@link Quest}s created using this constructor will expire after the specified time
 	 * limit.
 	 *
-	 * @param name The {@link String} name of the {@link Quest}, visible to the player in-game
-	 * @param reward The {@link Reward} which can be collected upon completion of the {@link Quest}
+	 * @param name           The {@link String} name of the {@link Quest}, visible to the player in-game
+	 * @param reward         The {@link Reward} which can be collected upon completion of the {@link Quest}
 	 * @param expiryDuration An integer value representing the number of hours before this {@link Quest} should expire
-	 * @param isMandatory A boolean value representing whether the {@link Quest} is mandatory. Mandatory {@link Quest}s
-	 *                    will result in a game over if it is not completed before it expires.
+	 * @param isMandatory    A boolean value representing whether the {@link Quest} is mandatory. Mandatory {@link Quest}s
+	 *                       will result in a game over if it is not completed before it expires.
 	 */
 	protected Quest(String name, Reward reward, int expiryDuration, boolean isMandatory) {
 		super(name);
@@ -87,6 +87,7 @@ public abstract class Quest extends Mission {
 	/**
 	 * Returns a boolean value representing whether the quest has expired. If the {@link Quest} does not expire, then
 	 * this method will always return false.
+	 *
 	 * @return True if the {@link Quest} can expire and has expired, false otherwise.
 	 */
 	public boolean isExpired() {
@@ -95,6 +96,7 @@ public abstract class Quest extends Mission {
 
 	/**
 	 * Determines whether the quest is mandatory or not
+	 *
 	 * @return boolean value representing whether the quest is mandatory
 	 */
 	public boolean isMandatory() {
@@ -103,6 +105,7 @@ public abstract class Quest extends Mission {
 
 	/**
 	 * Returns a boolean value representing if this quest's rewards has been collected yet.
+	 *
 	 * @return True if the reward has been collected, false otherwise.
 	 */
 	public boolean isRewardCollected() {

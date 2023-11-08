@@ -25,9 +25,10 @@ public class ParticleEffectWrapper {
 
 	/**
 	 * Wraps a pooled particle effect with a category and a type
-	 * @param effect pooled effect
+	 *
+	 * @param effect   pooled effect
 	 * @param category category of the particle effect
-	 * @param type type of particle effect
+	 * @param type     type of particle effect
 	 */
 	public ParticleEffectWrapper(PooledEffect effect, String category, String type) {
 		this.effect = effect;
@@ -37,6 +38,7 @@ public class ParticleEffectWrapper {
 
 	/**
 	 * Gets the pooled effect that is contained in the wrapper
+	 *
 	 * @return pooled effect
 	 */
 	public PooledEffect getPooledEffect() {
@@ -45,6 +47,7 @@ public class ParticleEffectWrapper {
 
 	/**
 	 * Gets the wrappers category
+	 *
 	 * @return category of the wrapper
 	 */
 	public String getCategory() {
@@ -53,6 +56,7 @@ public class ParticleEffectWrapper {
 
 	/**
 	 * Gets the type of particle effect in the wrapper
+	 *
 	 * @return type of particle effect
 	 */
 	public String getType() {

@@ -11,57 +11,57 @@ import com.csse3200.game.services.ServiceLocator;
  */
 public class LightController extends Component {
 
-    private enum WeatherEffectState {
-        NO_EFFECT,
-        DOUSING,
-        IGNITING
-    }
+	private enum WeatherEffectState {
+		NO_EFFECT,
+		DOUSING,
+		IGNITING
+	}
 
-    private static WeatherEffectState weatherEffectState = WeatherEffectState.NO_EFFECT;
+	private static WeatherEffectState weatherEffectState = WeatherEffectState.NO_EFFECT;
 
-    @Override
-    public void create() {
-        ServiceLocator.getGameArea().getClimateController().getEvents().addListener("igniteFlames",
-                () -> setWeatherDousingFlames(WeatherEffectState.IGNITING));
-        ServiceLocator.getGameArea().getClimateController().getEvents().addListener("douseFlames",
-                () -> setWeatherDousingFlames(WeatherEffectState.DOUSING));
-        ServiceLocator.getGameArea().getClimateController().getEvents().addListener("stopPlacedLightEffects",
-                () -> setWeatherDousingFlames(WeatherEffectState.NO_EFFECT));
-    }
+	@Override
+	public void create() {
+		ServiceLocator.getGameArea().getClimateController().getEvents().addListener("igniteFlames",
+				() -> setWeatherDousingFlames(WeatherEffectState.IGNITING));
+		ServiceLocator.getGameArea().getClimateController().getEvents().addListener("douseFlames",
+				() -> setWeatherDousingFlames(WeatherEffectState.DOUSING));
+		ServiceLocator.getGameArea().getClimateController().getEvents().addListener("stopPlacedLightEffects",
+				() -> setWeatherDousingFlames(WeatherEffectState.NO_EFFECT));
+	}
 
-    @Override
-    public void update() {
-        // Would've liked to use the events but won't work if you place during the night
-        if ((ServiceLocator.getTimeService().isDay() && weatherEffectState == WeatherEffectState.NO_EFFECT)
-                || weatherEffectState == WeatherEffectState.DOUSING) {
-            turnOff();
-        } else {
-            turnOn();
-        }
-    }
+	@Override
+	public void update() {
+		// Would've liked to use the events but won't work if you place during the night
+		if ((ServiceLocator.getTimeService().isDay() && weatherEffectState == WeatherEffectState.NO_EFFECT)
+				|| weatherEffectState == WeatherEffectState.DOUSING) {
+			turnOff();
+		} else {
+			turnOn();
+		}
+	}
 
 
-    public boolean turnOn() {
-        AuraLightComponent light = entity.getComponent(AuraLightComponent.class);
-        if (light != null && !light.getActive()) {
-            light.toggleLight();
-            entity.getComponent(AnimationRenderComponent.class).startAnimation("light_on");
-        }
-        return true;
-    }
+	public boolean turnOn() {
+		AuraLightComponent light = entity.getComponent(AuraLightComponent.class);
+		if (light != null && !light.getActive()) {
+			light.toggleLight();
+			entity.getComponent(AnimationRenderComponent.class).startAnimation("light_on");
+		}
+		return true;
+	}
 
-    public boolean turnOff() {
-        AuraLightComponent light = entity.getComponent(AuraLightComponent.class);
-        if (light != null && light.getActive()) {
-            light.toggleLight();
-            entity.getComponent(AnimationRenderComponent.class).startAnimation("light_off");
-        }
-        return true;
-    }
+	public boolean turnOff() {
+		AuraLightComponent light = entity.getComponent(AuraLightComponent.class);
+		if (light != null && light.getActive()) {
+			light.toggleLight();
+			entity.getComponent(AnimationRenderComponent.class).startAnimation("light_off");
+		}
+		return true;
+	}
 
-    private void setWeatherDousingFlames(WeatherEffectState weatherEffectState) {
-        // Not set to static as static methods can't be used in event listeners
-        LightController.weatherEffectState = weatherEffectState;
-    }
+	private void setWeatherDousingFlames(WeatherEffectState weatherEffectState) {
+		// Not set to static as static methods can't be used in event listeners
+		LightController.weatherEffectState = weatherEffectState;
+	}
 
 }

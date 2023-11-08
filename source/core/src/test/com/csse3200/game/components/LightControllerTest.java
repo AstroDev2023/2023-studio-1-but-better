@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LightControllerTest {
 
-    @Test
-    void turnOnOff() {
-        Entity lightEntity = new Entity().addComponent(new LightController());
+	@Test
+	void turnOnOff() {
+		Entity lightEntity = new Entity().addComponent(new LightController());
 
-        assertTrue(lightEntity.getComponent(LightController.class).turnOn());
-        assertTrue(lightEntity.getComponent(LightController.class).turnOff());
-    }
+		assertTrue(lightEntity.getComponent(LightController.class).turnOn());
+		assertTrue(lightEntity.getComponent(LightController.class).turnOff());
+	}
 }

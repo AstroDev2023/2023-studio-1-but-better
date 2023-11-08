@@ -13,34 +13,34 @@ import static org.mockito.Mockito.*;
 
 class WinRewardTest {
 
-    private WinReward reward;
+	private WinReward reward;
 
-    EventHandler eventHandler;
+	EventHandler eventHandler;
 
-    @BeforeEach
-    void init() {
-        reward = new WinReward();
+	@BeforeEach
+	void init() {
+		reward = new WinReward();
 
-        MissionManager missionManager = mock(MissionManager.class);
-        ServiceLocator.registerMissionManager(missionManager);
-        eventHandler = mock(EventHandler.class);
-        when(ServiceLocator.getMissionManager().getEvents()).thenReturn(eventHandler);
-    }
+		MissionManager missionManager = mock(MissionManager.class);
+		ServiceLocator.registerMissionManager(missionManager);
+		eventHandler = mock(EventHandler.class);
+		when(ServiceLocator.getMissionManager().getEvents()).thenReturn(eventHandler);
+	}
 
-   @AfterEach
-    void clearServiceLocator() {
-        ServiceLocator.clear();
-   }
+	@AfterEach
+	void clearServiceLocator() {
+		ServiceLocator.clear();
+	}
 
-   @Test
-    void collectWinReward() {
-        assertFalse(reward.isCollected());
+	@Test
+	void collectWinReward() {
+		assertFalse(reward.isCollected());
 
-        reward.collect();
+		reward.collect();
 
-        assertTrue(reward.isCollected());
+		assertTrue(reward.isCollected());
 
-        verify(eventHandler).trigger("winScreen");
-   }
+		verify(eventHandler).trigger("winScreen");
+	}
 
 }

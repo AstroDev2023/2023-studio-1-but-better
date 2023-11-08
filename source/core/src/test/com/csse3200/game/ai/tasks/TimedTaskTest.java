@@ -1,13 +1,5 @@
 package com.csse3200.game.ai.tasks;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import com.csse3200.game.ai.tasks.Task.Status;
 import com.csse3200.game.entities.Entity;
 import com.csse3200.game.extensions.GameExtension;
@@ -16,85 +8,93 @@ import com.csse3200.game.rendering.DebugRenderer;
 import com.csse3200.game.rendering.RenderService;
 import com.csse3200.game.services.GameTime;
 import com.csse3200.game.services.ServiceLocator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(GameExtension.class)
 class TimedTaskTest {
-    private Entity entity;
-    @BeforeEach
-    void beforeEach() {
-        // Mock rendering, physics, game time
-        RenderService renderService = new RenderService();
-        renderService.setDebug(mock(DebugRenderer.class));
-        ServiceLocator.registerRenderService(renderService);
-        GameTime gameTime = mock(GameTime.class);
-        when(gameTime.getDeltaTime()).thenReturn(1f); // one second passes each frame
-        ServiceLocator.registerTimeSource(gameTime);
-        ServiceLocator.registerPhysicsService(new PhysicsService());
+	private Entity entity;
 
-        entity = new Entity();
-    }
+	@BeforeEach
+	void beforeEach() {
+		// Mock rendering, physics, game time
+		RenderService renderService = new RenderService();
+		renderService.setDebug(mock(DebugRenderer.class));
+		ServiceLocator.registerRenderService(renderService);
+		GameTime gameTime = mock(GameTime.class);
+		when(gameTime.getDeltaTime()).thenReturn(1f); // one second passes each frame
+		ServiceLocator.registerTimeSource(gameTime);
+		ServiceLocator.registerPhysicsService(new PhysicsService());
 
-    @Test
-    void checkPriorityTriggeredOnEvent() {
-        TimedTask task = new TimedTask("trigger", 1f, 1);
-        task.create(() -> entity);
-        task.update();
+		entity = new Entity();
+	}
 
-        assertEquals(-1, task.getPriority()); // inactive priority
-        entity.getEvents().trigger("trigger");
-        assertEquals(1, task.getPriority());
-    }
+	@Test
+	void checkPriorityTriggeredOnEvent() {
+		TimedTask task = new TimedTask("trigger", 1f, 1);
+		task.create(() -> entity);
+		task.update();
 
-    @Test
-    void testTaskPriorityResetsAfterDuration() {
-        // Arrange
-        TimedTask task = new TimedTask("trigger", 5.0f, 10);
+		assertEquals(-1, task.getPriority()); // inactive priority
+		entity.getEvents().trigger("trigger");
+		assertEquals(1, task.getPriority());
+	}
 
-        // Act
-        task.create(() -> entity);
-        task.triggerActivePriority();
-        task.start(); // assume aiTaskComponent starts task, component already tested
-        for (int i = 0; i < 6; i++) {
-            task.update();
-        }
+	@Test
+	void testTaskPriorityResetsAfterDuration() {
+		// Arrange
+		TimedTask task = new TimedTask("trigger", 5.0f, 10);
 
-        // priority set back to inactive priority
-        assertEquals(-1, task.getPriority());
-    }
+		// Act
+		task.create(() -> entity);
+		task.triggerActivePriority();
+		task.start(); // assume aiTaskComponent starts task, component already tested
+		for (int i = 0; i < 6; i++) {
+			task.update();
+		}
 
-    @Test
-    void testTaskStops() {
-        TimedTask task = new TimedTask("trigger", 2.0f, 10);
+		// priority set back to inactive priority
+		assertEquals(-1, task.getPriority());
+	}
 
-        task.create(() -> entity);
-        task.triggerActivePriority();
-        task.start();
-        task.update();
+	@Test
+	void testTaskStops() {
+		TimedTask task = new TimedTask("trigger", 2.0f, 10);
 
-        task.stop();
-        assertEquals(task.getPriority(), -1);
-        assertEquals(Status.INACTIVE, task.getStatus());
-    }
+		task.create(() -> entity);
+		task.triggerActivePriority();
+		task.start();
+		task.update();
 
-    @Test
-    void testTaskGetsOverruledByHigherPriorityTask() {
-        TimedTask lowPriorityTask = new TimedTask("low", 10f, 1);
-        TimedTask highPriorityTask = new TimedTask("high", 10f, 2);
+		task.stop();
+		assertEquals(task.getPriority(), -1);
+		assertEquals(Status.INACTIVE, task.getStatus());
+	}
 
-        entity.addComponent(new AITaskComponent().addTask(lowPriorityTask).addTask(highPriorityTask));
-        entity.create();
+	@Test
+	void testTaskGetsOverruledByHigherPriorityTask() {
+		TimedTask lowPriorityTask = new TimedTask("low", 10f, 1);
+		TimedTask highPriorityTask = new TimedTask("high", 10f, 2);
 
-        entity.getEvents().trigger("low");
-        entity.update();
-        assertEquals(Status.ACTIVE, lowPriorityTask.getStatus());
+		entity.addComponent(new AITaskComponent().addTask(lowPriorityTask).addTask(highPriorityTask));
+		entity.create();
 
-        entity.getEvents().trigger("high");
-        entity.update();
-        assertEquals(Status.INACTIVE, lowPriorityTask.getStatus());
-        assertEquals(Status.ACTIVE, highPriorityTask.getStatus());
+		entity.getEvents().trigger("low");
+		entity.update();
+		assertEquals(Status.ACTIVE, lowPriorityTask.getStatus());
 
-        entity.getEvents().trigger("low");
-        assertEquals(Status.INACTIVE, lowPriorityTask.getStatus());
-        assertEquals(Status.ACTIVE, highPriorityTask.getStatus());
-    }
+		entity.getEvents().trigger("high");
+		entity.update();
+		assertEquals(Status.INACTIVE, lowPriorityTask.getStatus());
+		assertEquals(Status.ACTIVE, highPriorityTask.getStatus());
+
+		entity.getEvents().trigger("low");
+		assertEquals(Status.INACTIVE, lowPriorityTask.getStatus());
+		assertEquals(Status.ACTIVE, highPriorityTask.getStatus());
+	}
 }

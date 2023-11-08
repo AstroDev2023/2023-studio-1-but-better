@@ -14,35 +14,35 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MultiRewardTest {
-    private MultiReward multiReward1, multiReward2;
-    private List<Reward> rewards;
+	private MultiReward multiReward1, multiReward2;
+	private List<Reward> rewards;
 
-    @BeforeEach
-    void init() {
-        multiReward1 = new MultiReward(new ArrayList<>());
+	@BeforeEach
+	void init() {
+		multiReward1 = new MultiReward(new ArrayList<>());
 
-        rewards = List.of(
-                mock(Reward.class),
-                mock(Reward.class),
-                mock(Reward.class)
-        );
+		rewards = List.of(
+				mock(Reward.class),
+				mock(Reward.class),
+				mock(Reward.class)
+		);
 
-        multiReward2 = new MultiReward(rewards);
-    }
+		multiReward2 = new MultiReward(rewards);
+	}
 
-    @Test
-    void testEmptyCollect() {
-        multiReward1.collect();
-        assertTrue(multiReward1.isCollected());
-    }
+	@Test
+	void testEmptyCollect() {
+		multiReward1.collect();
+		assertTrue(multiReward1.isCollected());
+	}
 
-    @Test
-    void nonEmptyCollect() {
-        multiReward2.collect();
-        assertTrue(multiReward2.isCollected());
+	@Test
+	void nonEmptyCollect() {
+		multiReward2.collect();
+		assertTrue(multiReward2.isCollected());
 
-        for (Reward reward : rewards) {
-            verify(reward).collect();
-        }
-    }
+		for (Reward reward : rewards) {
+			verify(reward).collect();
+		}
+	}
 }

@@ -235,7 +235,6 @@ class ClimateControllerTest {
 	}
 
 
-
 	@Test
 	void testExpiringEvent() {
 		GameArea gameArea = mock(GameArea.class);
@@ -452,7 +451,7 @@ class ClimateControllerTest {
 	void testUpdateLightingEffectWhenEventHasCompleted() {
 		when(gameTime.getDeltaTime()).thenReturn(0.05f);
 		controller.updateClimate();
-		verify(lightService,times(1)).setColourOffset(Color.CLEAR);
+		verify(lightService, times(1)).setColourOffset(Color.CLEAR);
 	}
 
 	@Test
@@ -471,7 +470,7 @@ class ClimateControllerTest {
 		currentLightingEffectGradientField.set(controller, (Function<Float, Color>) t -> Color.BLUE);
 
 		controller.updateClimate();
-		verify(lightService,times(1)).setColourOffset(Color.BLUE);
+		verify(lightService, times(1)).setColourOffset(Color.BLUE);
 	}
 
 }

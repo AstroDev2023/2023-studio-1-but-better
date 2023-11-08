@@ -1,25 +1,23 @@
 package com.csse3200.game.ui.terminal.commands;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.ArrayList;
-
+import com.csse3200.game.extensions.GameExtension;
+import com.csse3200.game.services.ServiceLocator;
+import com.csse3200.game.services.TimeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.csse3200.game.extensions.GameExtension;
-import com.csse3200.game.services.ServiceLocator;
-import com.csse3200.game.services.TimeService;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(GameExtension.class)
 class SetDayCommandTest {
 
 	SetDayCommand command;
 	ArrayList<String> args;
+
 	@BeforeEach
 	void beforeEach() {
 		ServiceLocator.clear();

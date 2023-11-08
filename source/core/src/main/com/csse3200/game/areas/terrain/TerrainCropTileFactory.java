@@ -1,16 +1,15 @@
 package com.csse3200.game.areas.terrain;
 
-import com.csse3200.game.components.ParticleEffectComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.math.Vector2;
+import com.csse3200.game.components.ParticleEffectComponent;
 import com.csse3200.game.entities.Entity;
 import com.csse3200.game.entities.EntityType;
 import com.csse3200.game.entities.configs.CropTileConfig;
 import com.csse3200.game.physics.components.ColliderComponent;
 import com.csse3200.game.physics.components.PhysicsComponent;
 import com.csse3200.game.rendering.DynamicTextureRenderComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TerrainCropTileFactory {
 

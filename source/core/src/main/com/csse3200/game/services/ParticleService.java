@@ -10,7 +10,10 @@ import com.csse3200.game.rendering.ParticleEffectWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class ParticleService {

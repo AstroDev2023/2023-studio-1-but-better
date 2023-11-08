@@ -3,11 +3,15 @@ package com.csse3200.game.components.inventory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.csse3200.game.extensions.GameExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.Mockito.*;
+
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 /**
  * Factory to create a mock player entity for testing.
@@ -25,20 +29,21 @@ class TooltipTest {
 		Skin skin = new Skin(Gdx.files.internal("gardens-of-the-galaxy/gardens-of-the-galaxy.json"));
 		TextTooltip tooltip = new TextTooltip("hi", tooltipManager, skin);
 		InputEvent ie = new InputEvent();
-		ie.setListenerActor(new Window("window",skin));
-		tooltip.enter(ie,1,1,-1,new Actor());
+		ie.setListenerActor(new Window("window", skin));
+		tooltip.enter(ie, 1, 1, -1, new Actor());
 		verify(tooltipManager).enter(tooltip);
 
 	}
+
 	@Test
 	void testTooltipExit() {
 		InstantTooltipManager tooltipManager = spy(new InstantTooltipManager());
 		Skin skin = new Skin(Gdx.files.internal("gardens-of-the-galaxy/gardens-of-the-galaxy.json"));
 		TextTooltip tooltip = new TextTooltip("hi", tooltipManager, skin);
 		InputEvent ie = new InputEvent();
-		ie.setListenerActor(new Window("window",skin));
-		tooltip.enter(ie,1,1,-1,new Actor());
-		tooltip.exit(ie,1,1,-1,new Actor());
+		ie.setListenerActor(new Window("window", skin));
+		tooltip.enter(ie, 1, 1, -1, new Actor());
+		tooltip.exit(ie, 1, 1, -1, new Actor());
 		verify(tooltipManager).hide(tooltip);
 
 	}

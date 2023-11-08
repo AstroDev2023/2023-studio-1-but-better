@@ -20,82 +20,82 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(GameExtension.class)
 class PlantMouseHoverComponentTest {
-    PlantMouseHoverComponent plantMouseHoverComponent;
+	PlantMouseHoverComponent plantMouseHoverComponent;
 
-    @Mock
-    private PlantInfoService plantInfoService;
+	@Mock
+	private PlantInfoService plantInfoService;
 
-    /**
-     * Sets up the test environment before each test case.
-     */
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-        plantMouseHoverComponent = new PlantMouseHoverComponent();
-        plantMouseHoverComponent.setEntity(new Entity());
-        ServiceLocator.registerPlantInfoService(plantInfoService);
-        when(plantInfoService.getEvents()).thenReturn(new EventHandler());
-    }
+	/**
+	 * Sets up the test environment before each test case.
+	 */
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.initMocks(this);
+		plantMouseHoverComponent = new PlantMouseHoverComponent();
+		plantMouseHoverComponent.setEntity(new Entity());
+		ServiceLocator.registerPlantInfoService(plantInfoService);
+		when(plantInfoService.getEvents()).thenReturn(new EventHandler());
+	}
 
-    /**
-     * Test isPlantDead is false by default
-     */
-    @Test
-    void testIsPlantDead_False() {
-        assertFalse(plantMouseHoverComponent.isPlantDead());
-    }
+	/**
+	 * Test isPlantDead is false by default
+	 */
+	@Test
+	void testIsPlantDead_False() {
+		assertFalse(plantMouseHoverComponent.isPlantDead());
+	}
 
-    /**
-     * Test isPlantDead is true when setPlantDied is called
-     */
-    @Test
-    void testIsPlantDead_True() {
-        plantMouseHoverComponent.setPlantDied(true);
-        assertTrue(plantMouseHoverComponent.isPlantDead());
-    }
+	/**
+	 * Test isPlantDead is true when setPlantDied is called
+	 */
+	@Test
+	void testIsPlantDead_True() {
+		plantMouseHoverComponent.setPlantDied(true);
+		assertTrue(plantMouseHoverComponent.isPlantDead());
+	}
 
-    /**
-     * Test isShowInfo is false by default
-     */
-    @Test
-    void testIsShowInfo_False() {
-        assertFalse(plantMouseHoverComponent.isShowInfo());
-    }
+	/**
+	 * Test isShowInfo is false by default
+	 */
+	@Test
+	void testIsShowInfo_False() {
+		assertFalse(plantMouseHoverComponent.isShowInfo());
+	}
 
-    /**
-     * Test isShowInfo is true when setShowInfo is called
-     */
-    @Test
-    void testIsShowInfo_True() {
-        plantMouseHoverComponent.setShowInfo(true);
-        assertTrue(plantMouseHoverComponent.isShowInfo());
-    }
+	/**
+	 * Test isShowInfo is true when setShowInfo is called
+	 */
+	@Test
+	void testIsShowInfo_True() {
+		plantMouseHoverComponent.setShowInfo(true);
+		assertTrue(plantMouseHoverComponent.isShowInfo());
+	}
 
-    /**
-     * Test noMoreUse is false by default
-     */
-    @Test
-    void testIsNoMoreUse_False() {
-        assertFalse(plantMouseHoverComponent.isNoMoreUse());
-    }
+	/**
+	 * Test noMoreUse is false by default
+	 */
+	@Test
+	void testIsNoMoreUse_False() {
+		assertFalse(plantMouseHoverComponent.isNoMoreUse());
+	}
 
-    /**
-     * Test noMoreUse is true when setNoMoreUse is called
-     */
-    @Test
-    void testIsNoMoreUse_True() {
-        plantMouseHoverComponent.setNoMoreUse(true);
-        assertTrue(plantMouseHoverComponent.isNoMoreUse());
-    }
+	/**
+	 * Test noMoreUse is true when setNoMoreUse is called
+	 */
+	@Test
+	void testIsNoMoreUse_True() {
+		plantMouseHoverComponent.setNoMoreUse(true);
+		assertTrue(plantMouseHoverComponent.isNoMoreUse());
+	}
 
-    /**
-     * Test showInfo, plantDead, and noMoreUse are false when create is called
-     */
-    @Test
-    void testCreate() {
-        plantMouseHoverComponent.create();
-        assertFalse(plantMouseHoverComponent.isShowInfo());
-        assertFalse(plantMouseHoverComponent.isPlantDead());
-        assertFalse(plantMouseHoverComponent.isNoMoreUse());
-    }
+	/**
+	 * Test showInfo, plantDead, and noMoreUse are false when create is called
+	 */
+	@Test
+	void testCreate() {
+		plantMouseHoverComponent.create();
+		assertFalse(plantMouseHoverComponent.isShowInfo());
+		assertFalse(plantMouseHoverComponent.isPlantDead());
+		assertFalse(plantMouseHoverComponent.isNoMoreUse());
+	}
 }

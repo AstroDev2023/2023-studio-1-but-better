@@ -1,6 +1,5 @@
 package com.csse3200.game.components.ship;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.csse3200.game.areas.TestGameArea;
@@ -282,7 +281,7 @@ class ShipEaterIntegrationTest {
 
 		runGame(10);
 
-        assertFalse(isHiding);
+		assertFalse(isHiding);
 		assertTrue(isEating);
 
 	}
@@ -303,7 +302,7 @@ class ShipEaterIntegrationTest {
 
 		float updatedDistanceToShip = entity.getPosition().dst(ship.getPosition());
 
-		assertEquals(initialDistanceToShip ,updatedDistanceToShip);
+		assertEquals(initialDistanceToShip, updatedDistanceToShip);
 	}
 
 	@Test

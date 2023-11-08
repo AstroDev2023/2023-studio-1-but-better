@@ -1,15 +1,5 @@
 package com.csse3200.game.ui.terminal.commands;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
-
 import com.badlogic.gdx.math.Vector2;
 import com.csse3200.game.areas.GameArea;
 import com.csse3200.game.areas.SpaceGameArea;
@@ -18,6 +8,15 @@ import com.csse3200.game.entities.EntityService;
 import com.csse3200.game.entities.factories.NPCFactory;
 import com.csse3200.game.extensions.GameExtension;
 import com.csse3200.game.services.ServiceLocator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(GameExtension.class)
 class SpawnCommandTest {
@@ -95,7 +94,7 @@ class SpawnCommandTest {
 			assertFalse(command.action(args));
 			factory.verify(() -> NPCFactory.createCow(), times(1));
 			verify(player, times(0)).getPosition();
-			verify(cow,times(0)).setPosition(position);
+			verify(cow, times(0)).setPosition(position);
 			verify(entityService, times(0)).register(cow);
 		}
 	}

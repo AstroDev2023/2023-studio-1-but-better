@@ -103,6 +103,7 @@ public class MissionManager implements Json.Serializable {
 	 * Accepts a quest by adding it to the list of active quests in the game.  Also registers this quest in the game.
 	 * If this {@link Quest} is in the {@link List} of selectable {@link Quest}s, then this method will also remove the
 	 * {@link Quest} from the {@link List} of selectable {@link Quest}s.
+	 *
 	 * @param quest The {@link Quest} to be added and registered
 	 */
 	public void acceptQuest(Quest quest) {
@@ -115,6 +116,7 @@ public class MissionManager implements Json.Serializable {
 	/**
 	 * Returns a {@link List} of currently active (tracked) {@link Quest}s. This includes all {@link Quest}s which have not
 	 * expired (that is, they have been accepted, and they have been completed or not yet expired).
+	 *
 	 * @return The {@link List} of active {@link Quest}s.
 	 */
 	public List<Quest> getActiveQuests() {
@@ -124,6 +126,7 @@ public class MissionManager implements Json.Serializable {
 	/**
 	 * Adds a {@link Quest} to the {@link List} of selectable {@link Quest}s. Selectable {@link Quest}s can be accepted
 	 * by the player through the in-game quest NPC.
+	 *
 	 * @param quest The {@link Quest} to add (this {@link Quest} should not have already been registered).
 	 */
 	public void addQuest(Quest quest) {
@@ -134,6 +137,7 @@ public class MissionManager implements Json.Serializable {
 	/**
 	 * Returns a {@link List} of selectable {@link Quest}s. These {@link Quest}s can be accepted in-game through
 	 * interaction with the quest NPC.
+	 *
 	 * @return The list of selectable {@link Quest}s.
 	 */
 	public List<Quest> getSelectableQuests() {
@@ -142,6 +146,7 @@ public class MissionManager implements Json.Serializable {
 
 	/**
 	 * Returns all in-game {@link Achievement}s.
+	 *
 	 * @return All in-game {@link Achievement}s.
 	 */
 	public Achievement[] getAchievements() {
@@ -151,8 +156,9 @@ public class MissionManager implements Json.Serializable {
 	/**
 	 * Returns the {@link MissionManager}'s {@link EventHandler}, which is responsible for triggering events which
 	 * update the state of {@link Mission}s
+	 *
 	 * @return The {@link EventHandler} of the {@link MissionManager}, from which events can be triggered to update the
-	 * 		   state of relevant {@link Mission}s.
+	 * state of relevant {@link Mission}s.
 	 */
 	public EventHandler getEvents() {
 		return events;
@@ -175,6 +181,7 @@ public class MissionManager implements Json.Serializable {
 
 	/**
 	 * Writes the {@link MissionManager} to a Json object for saving
+	 *
 	 * @param json Json object written to
 	 */
 	@Override
@@ -227,6 +234,7 @@ public class MissionManager implements Json.Serializable {
 
 	/**
 	 * Method for loading the {@link MissionManager} for the game
+	 *
 	 * @param json
 	 * @param jsonMap
 	 */

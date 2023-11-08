@@ -10,41 +10,41 @@ import com.csse3200.game.ui.UIComponent;
 
 public class DimComponent extends UIComponent {
 
-    Image transparentRectangle;
+	Image transparentRectangle;
 
-    @Override
-    public void create() {
-        super.create();
+	@Override
+	public void create() {
+		super.create();
 
-        // setup for dimming screen, taken from Team 3's cutscene dimming.
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.BLACK);
-        pixmap.fillRectangle(0, 0, 1, 1);
-        Texture transparentRecTex = new Texture(pixmap);
-        pixmap.dispose();
+		// setup for dimming screen, taken from Team 3's cutscene dimming.
+		Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+		pixmap.setColor(Color.BLACK);
+		pixmap.fillRectangle(0, 0, 1, 1);
+		Texture transparentRecTex = new Texture(pixmap);
+		pixmap.dispose();
 
-        transparentRectangle = new Image(transparentRecTex);
-        transparentRectangle.setVisible(false);
-        transparentRectangle.setColor(Color.BLACK);
-        transparentRectangle.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.addActor(transparentRectangle);
+		transparentRectangle = new Image(transparentRecTex);
+		transparentRectangle.setVisible(false);
+		transparentRectangle.setColor(Color.BLACK);
+		transparentRectangle.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage.addActor(transparentRectangle);
 
-        entity.getEvents().addListener("blackOut", this::visible);
-        entity.getEvents().addListener("visibleFalse", this::invis);
-    }
+		entity.getEvents().addListener("blackOut", this::visible);
+		entity.getEvents().addListener("visibleFalse", this::invis);
+	}
 
-    private void invis() {
-        transparentRectangle.setVisible(false);
-    }
+	private void invis() {
+		transparentRectangle.setVisible(false);
+	}
 
-    private void visible() {
-        transparentRectangle.setVisible(true);
-        entity.getEvents().scheduleEvent(0.15f, "visibleFalse");
-    }
+	private void visible() {
+		transparentRectangle.setVisible(true);
+		entity.getEvents().scheduleEvent(0.15f, "visibleFalse");
+	}
 
 
-    @Override
-    protected void draw(SpriteBatch batch) {
-        // Do not think i will
-    }
+	@Override
+	protected void draw(SpriteBatch batch) {
+		// Do not think i will
+	}
 }

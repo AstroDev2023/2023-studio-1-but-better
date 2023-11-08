@@ -1,10 +1,9 @@
 package com.csse3200.game.services;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-
-import box2dLight.RayHandler;
 
 public class LightService {
 	/**
@@ -48,6 +47,7 @@ public class LightService {
 
 	/**
 	 * Getter method for the ray handler
+	 *
 	 * @return ray handler instance used for creating lights
 	 */
 	public RayHandler getRayHandler() {
@@ -57,6 +57,7 @@ public class LightService {
 	/**
 	 * Sets the global ambient colour offset. This offset will be added to the global ambient lighting (after any
 	 * brightness multipliers are applied).
+	 *
 	 * @param colourOffset The global ambient light colour offset. Set to {@link Color#CLEAR} for default.
 	 */
 	public void setColourOffset(Color colourOffset) {
@@ -66,6 +67,7 @@ public class LightService {
 	/**
 	 * Sets the global ambient brightness multiplier. This multiplier will pre-multiply the global brightness (before
 	 * any global brightness offsets are added.
+	 *
 	 * @param brightnessMultiplier The global ambient light brightness multiplier. Set to 1 for regular.
 	 */
 	public void setBrightnessMultiplier(float brightnessMultiplier) {

@@ -1,17 +1,17 @@
 package com.csse3200.game.ui.terminal.commands;
 
-import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.math.Vector2;
 import com.csse3200.game.entities.Entity;
 import com.csse3200.game.entities.factories.NPCFactory;
 import com.csse3200.game.services.ServiceLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 public class SpawnCommand implements Command {
 	private static final Logger logger = LoggerFactory.getLogger(SpawnCommand.class);
+
 	/**
 	 * Spawns an entity in the game world.
 	 *
@@ -32,7 +32,7 @@ public class SpawnCommand implements Command {
 			case "oe" -> entity = NPCFactory.createOxygenEater();
 			case "dragonfly" -> entity = NPCFactory.createDragonfly();
 			case "bat" -> entity = NPCFactory.createBat();
-				default -> {
+			default -> {
 				logger.debug("Entity argument is not valid");
 				return false;
 			}

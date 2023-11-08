@@ -23,56 +23,56 @@ import static org.mockito.Mockito.*;
 @ExtendWith(GameExtension.class)
 class TriggerWeatherRewardTest {
 
-    private TriggerWeatherReward reward1, reward2;
+	private TriggerWeatherReward reward1, reward2;
 
-    private List<WeatherEvent> weatherEventList, emptyWeatherEventList;
+	private List<WeatherEvent> weatherEventList, emptyWeatherEventList;
 
-    private ClimateController climateController;
+	private ClimateController climateController;
 
-    @BeforeEach
-    void init() {
-        emptyWeatherEventList = new ArrayList<>();
-        weatherEventList = List.of(
-                mock(WeatherEvent.class),
-                mock(WeatherEvent.class),
-                mock(WeatherEvent.class)
-        );
+	@BeforeEach
+	void init() {
+		emptyWeatherEventList = new ArrayList<>();
+		weatherEventList = List.of(
+				mock(WeatherEvent.class),
+				mock(WeatherEvent.class),
+				mock(WeatherEvent.class)
+		);
 
-        reward1 = new TriggerWeatherReward(emptyWeatherEventList);
-        reward2 = new TriggerWeatherReward(weatherEventList);
+		reward1 = new TriggerWeatherReward(emptyWeatherEventList);
+		reward2 = new TriggerWeatherReward(weatherEventList);
 
-        GameTime gameTime = mock(GameTime.class);
-        TimeService timeService = mock(TimeService.class);
-        ServiceLocator.registerTimeSource(gameTime);
-        ServiceLocator.registerTimeService(timeService);
-        GameArea gameArea = mock(SpaceGameArea.class);
-        ServiceLocator.registerGameArea(gameArea);
-        EventHandler handler = new EventHandler();
-        when(timeService.getEvents()).thenReturn(handler);
-        climateController = mock(ClimateController.class);
-        when(ServiceLocator.getGameArea().getClimateController()).thenReturn(climateController);
-    }
+		GameTime gameTime = mock(GameTime.class);
+		TimeService timeService = mock(TimeService.class);
+		ServiceLocator.registerTimeSource(gameTime);
+		ServiceLocator.registerTimeService(timeService);
+		GameArea gameArea = mock(SpaceGameArea.class);
+		ServiceLocator.registerGameArea(gameArea);
+		EventHandler handler = new EventHandler();
+		when(timeService.getEvents()).thenReturn(handler);
+		climateController = mock(ClimateController.class);
+		when(ServiceLocator.getGameArea().getClimateController()).thenReturn(climateController);
+	}
 
-    @AfterEach
-    void clearServiceLocator() {
-        ServiceLocator.clear();
-    }
+	@AfterEach
+	void clearServiceLocator() {
+		ServiceLocator.clear();
+	}
 
-    @Test
-    void collectEmptyWeatherReward() {
-        reward1.collect();
-        assertTrue(reward1.isCollected());
+	@Test
+	void collectEmptyWeatherReward() {
+		reward1.collect();
+		assertTrue(reward1.isCollected());
 
-        verifyNoInteractions(climateController);
-    }
+		verifyNoInteractions(climateController);
+	}
 
-    @Test
-    void collectWeatherReward() {
-        reward2.collect();
-        assertTrue((reward2.isCollected()));
+	@Test
+	void collectWeatherReward() {
+		reward2.collect();
+		assertTrue((reward2.isCollected()));
 
-        for (WeatherEvent weatherEvent : weatherEventList) {
-            verify(climateController).addWeatherEvent(weatherEvent);
-        }
-    }
+		for (WeatherEvent weatherEvent : weatherEventList) {
+			verify(climateController).addWeatherEvent(weatherEvent);
+		}
+	}
 }

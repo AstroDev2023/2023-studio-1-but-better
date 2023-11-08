@@ -1,66 +1,66 @@
 package com.csse3200.game.entities;
 
-import java.security.SecureRandom;
-
 import com.badlogic.gdx.math.GridPoint2;
 import com.csse3200.game.entities.factories.NPCFactory;
 import com.csse3200.game.services.ServiceLocator;
 
+import java.security.SecureRandom;
+
 public class FireflySpawner {
 
-    /**
-     * The amount of fireflies to spawn in
-     */
-    protected static final int MAX_FIREFLIES = 75;
+	/**
+	 * The amount of fireflies to spawn in
+	 */
+	protected static final int MAX_FIREFLIES = 75;
 
-    /**
-     * The width of the map
-     */
-    private int mapSizeX;
+	/**
+	 * The width of the map
+	 */
+	private int mapSizeX;
 
-    /**
-     * The length of the map
-     */
-    private int mapSizeY;
+	/**
+	 * The length of the map
+	 */
+	private int mapSizeY;
 
-    /**
-     * Used to get random variables
-     */
-    private SecureRandom random;
+	/**
+	 * Used to get random variables
+	 */
+	private SecureRandom random;
 
-    /**
-     * Constructor for the spawner, making this will call startSpawning at nightTime event
-     * triggered by TimeService
-     */
-    public FireflySpawner() {
-        GridPoint2 mapSize = ServiceLocator.getGameArea().getMap().getMapSize();
-        mapSizeX = mapSize.x;
-        mapSizeY = mapSize.y;
+	/**
+	 * Constructor for the spawner, making this will call startSpawning at nightTime event
+	 * triggered by TimeService
+	 */
+	public FireflySpawner() {
+		GridPoint2 mapSize = ServiceLocator.getGameArea().getMap().getMapSize();
+		mapSizeX = mapSize.x;
+		mapSizeY = mapSize.y;
 
-        random = new SecureRandom();
+		random = new SecureRandom();
 
-        ServiceLocator.getTimeService().getEvents().addListener("nightTime", this::startSpawning);
-        ServiceLocator.getGameArea().getClimateController().getEvents().addListener("spawnFireflies", this::startSpawning);
-    }
+		ServiceLocator.getTimeService().getEvents().addListener("nightTime", this::startSpawning);
+		ServiceLocator.getGameArea().getClimateController().getEvents().addListener("spawnFireflies", this::startSpawning);
+	}
 
-    /**
-     * Starts to spawn the fireflies
-     * Spawns MAX_FIREFLIES fireflies
-     */
-    protected void startSpawning() {
-        for (int i = 0; i < MAX_FIREFLIES; i++) {
-            spawnFirefly();
-        }
-    }
+	/**
+	 * Starts to spawn the fireflies
+	 * Spawns MAX_FIREFLIES fireflies
+	 */
+	protected void startSpawning() {
+		for (int i = 0; i < MAX_FIREFLIES; i++) {
+			spawnFirefly();
+		}
+	}
 
-    /**
-     * Spawns a firefly at a random traversable grid tile
-     */
-    void spawnFirefly() {
-        GridPoint2 randomGrid;
-        do {
-            randomGrid = new GridPoint2(random.nextInt(mapSizeX), random.nextInt(mapSizeY));
-        } while (!ServiceLocator.getGameArea().getMap().getTile(randomGrid).isTraversable());
-        ServiceLocator.getGameArea().spawnEntityAt(NPCFactory.createFireFlies(), randomGrid, true, true);
-    }
+	/**
+	 * Spawns a firefly at a random traversable grid tile
+	 */
+	void spawnFirefly() {
+		GridPoint2 randomGrid;
+		do {
+			randomGrid = new GridPoint2(random.nextInt(mapSizeX), random.nextInt(mapSizeY));
+		} while (!ServiceLocator.getGameArea().getMap().getTile(randomGrid).isTraversable());
+		ServiceLocator.getGameArea().spawnEntityAt(NPCFactory.createFireFlies(), randomGrid, true, true);
+	}
 }

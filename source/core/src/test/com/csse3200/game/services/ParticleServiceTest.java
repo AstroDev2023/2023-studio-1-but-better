@@ -1,16 +1,12 @@
 package com.csse3200.game.services;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.csse3200.game.areas.GameArea;
 import com.csse3200.game.components.CameraComponent;
 import com.csse3200.game.components.ParticleEffectComponent;
-import com.csse3200.game.entities.Entity;
 import com.csse3200.game.rendering.ParticleEffectWrapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,9 +16,12 @@ import org.junit.platform.commons.util.ReflectionUtils;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -266,7 +265,7 @@ class ParticleServiceTest {
 		when(mockPools.get(any(ParticleService.ParticleEffectType.class))).thenReturn(pool);
 		when(pool.obtain()).thenReturn(pooledEffect);
 
-		Vector2 position = new Vector2(1,0);
+		Vector2 position = new Vector2(1, 0);
 		particleService.startEffectAtPosition(ParticleService.ParticleEffectType.RAIN, position);
 
 		verify(pooledEffect, times(1)).setPosition(position.x, position.y);

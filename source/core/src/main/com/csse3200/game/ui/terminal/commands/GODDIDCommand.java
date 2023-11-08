@@ -8,22 +8,23 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-public class GODDIDCommand implements Command{
-    private static final Logger logger = LoggerFactory.getLogger(GODDIDCommand.class);
+public class GODDIDCommand implements Command {
+	private static final Logger logger = LoggerFactory.getLogger(GODDIDCommand.class);
 
-    /**
-     * loads game through the SaveLoad service (imagine copying t1's code right)
-     * @param args command arguments
-     */
-    public boolean action(ArrayList<String> args) {
-        if (!args.isEmpty()) {
-            logger.debug("Invalid arguments received for 'god' command: {}", args);
-            return false;
-        }
-        // Do god stuff
-        ServiceLocator.god = !ServiceLocator.god;
-        ServiceLocator.getGameArea().getPlayer().getComponent(HungerComponent.class).setHungerLevel(100);
-        ServiceLocator.getGameArea().getPlayer().getComponent(CombatStatsComponent.class).setHealth(100);
-        return true;
-    }
+	/**
+	 * loads game through the SaveLoad service (imagine copying t1's code right)
+	 *
+	 * @param args command arguments
+	 */
+	public boolean action(ArrayList<String> args) {
+		if (!args.isEmpty()) {
+			logger.debug("Invalid arguments received for 'god' command: {}", args);
+			return false;
+		}
+		// Do god stuff
+		ServiceLocator.god = !ServiceLocator.god;
+		ServiceLocator.getGameArea().getPlayer().getComponent(HungerComponent.class).setHungerLevel(100);
+		ServiceLocator.getGameArea().getPlayer().getComponent(CombatStatsComponent.class).setHealth(100);
+		return true;
+	}
 }

@@ -14,8 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedConstruction;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-
 import static org.mockito.Mockito.*;
 
 @ExtendWith(GameExtension.class)

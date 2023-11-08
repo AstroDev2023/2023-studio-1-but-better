@@ -13,131 +13,145 @@ import com.csse3200.game.services.ServiceLocator;
  * It handles movement, duration, impact, and destruction of the projectile.
  */
 public class ProjectileComponent extends Component {
-    /** Speed of projectile */
-    private Vector2 speed;
-    /** Duration for which projectile remains active before being destroyed */
-    private final float duration;
-    /** Indicates whether projectile has impacted */
-    private boolean hasImpact;
-    /** Physics component of projectile */
-    private PhysicsComponent physicsComponent;
-    /** The scheduled event to handle projectile expiration. */
-    private ScheduledEvent bulletExpiredEvent;
-    /** Velocity vector of projectile */
-    private Vector2 velocity;
-    private boolean constantVelocity = false;
-    private boolean destroyOnImpact = false;
-    private boolean destroyed = false;
-    /**
-     * Constructs a ProjectileComponent with a specified duration.
-     *
-     * @param duration The duration for which the projectile remains active before self-destruction.
-     */
-    public ProjectileComponent(float duration) {
-        this.duration = duration;
-        speed = new Vector2(1f, 1f);
-    }
+	/**
+	 * Speed of projectile
+	 */
+	private Vector2 speed;
+	/**
+	 * Duration for which projectile remains active before being destroyed
+	 */
+	private final float duration;
+	/**
+	 * Indicates whether projectile has impacted
+	 */
+	private boolean hasImpact;
+	/**
+	 * Physics component of projectile
+	 */
+	private PhysicsComponent physicsComponent;
+	/**
+	 * The scheduled event to handle projectile expiration.
+	 */
+	private ScheduledEvent bulletExpiredEvent;
+	/**
+	 * Velocity vector of projectile
+	 */
+	private Vector2 velocity;
+	private boolean constantVelocity = false;
+	private boolean destroyOnImpact = false;
+	private boolean destroyed = false;
 
-    /**
-     * Initializes the ProjectileComponent when it is created.
-     * Sets up physics properties, event listeners, and schedules the projectile's destruction.
-     */
-    @Override
-    public void create() {
-        physicsComponent = entity.getComponent(PhysicsComponent.class);
-        physicsComponent.getBody().setBullet(true);
-        entity.getEvents().addListener("destroyProjectile", this::destroyProjectile);
-        entity.getEvents().addListener("impactStart", this::impact);
+	/**
+	 * Constructs a ProjectileComponent with a specified duration.
+	 *
+	 * @param duration The duration for which the projectile remains active before self-destruction.
+	 */
+	public ProjectileComponent(float duration) {
+		this.duration = duration;
+		speed = new Vector2(1f, 1f);
+	}
 
-        // Schedule an event to destroy the projectile after the specified duration.
-        bulletExpiredEvent = entity.getEvents().scheduleEvent(duration, "destroyProjectile");
-    }
+	/**
+	 * Initializes the ProjectileComponent when it is created.
+	 * Sets up physics properties, event listeners, and schedules the projectile's destruction.
+	 */
+	@Override
+	public void create() {
+		physicsComponent = entity.getComponent(PhysicsComponent.class);
+		physicsComponent.getBody().setBullet(true);
+		entity.getEvents().addListener("destroyProjectile", this::destroyProjectile);
+		entity.getEvents().addListener("impactStart", this::impact);
 
-    /**
-     * Sets the target direction for the projectile and applies velocity to its physics body.
-     *
-     * @param target The target position to which the projectile should be directed.
-     */
-    public void setTargetDirection(Vector2 target) {
-        Vector2 directionVector = target.cpy().sub(entity.getCenterPosition()).nor();
-        velocity = directionVector.scl(speed);
+		// Schedule an event to destroy the projectile after the specified duration.
+		bulletExpiredEvent = entity.getEvents().scheduleEvent(duration, "destroyProjectile");
+	}
 
-        Body body = physicsComponent.getBody();
-        if (constantVelocity) {
-            body.setAngularDamping(0f);
-            body.setLinearDamping(0f);
-        }
-        body.setLinearVelocity(0, 0);
-        body.applyLinearImpulse(velocity, body.getWorldCenter(), true);
-    }
+	/**
+	 * Sets the target direction for the projectile and applies velocity to its physics body.
+	 *
+	 * @param target The target position to which the projectile should be directed.
+	 */
+	public void setTargetDirection(Vector2 target) {
+		Vector2 directionVector = target.cpy().sub(entity.getCenterPosition()).nor();
+		velocity = directionVector.scl(speed);
 
-    public void setConstantVelocity(boolean constantVelocity) {
-        this.constantVelocity = constantVelocity;
-    }
+		Body body = physicsComponent.getBody();
+		if (constantVelocity) {
+			body.setAngularDamping(0f);
+			body.setLinearDamping(0f);
+		}
+		body.setLinearVelocity(0, 0);
+		body.applyLinearImpulse(velocity, body.getWorldCenter(), true);
+	}
 
-    /**
-     * Sets the speed of the projectile.
-     *
-     * @param speed The new speed vector for the projectile.
-     */
-    public void setSpeed(Vector2 speed) {
-        this.speed = speed;
-    }
+	public void setConstantVelocity(boolean constantVelocity) {
+		this.constantVelocity = constantVelocity;
+	}
 
-    /**
-     * Destroys the projectile entity by removing it from the game area.
-     */
-    private void destroyProjectile() {
-        if (destroyed) {
-            return;
-        }
+	/**
+	 * Sets the speed of the projectile.
+	 *
+	 * @param speed The new speed vector for the projectile.
+	 */
+	public void setSpeed(Vector2 speed) {
+		this.speed = speed;
+	}
 
-        destroyed = true;
-        ServiceLocator.getGameArea().removeEntity(entity);
-    }
+	/**
+	 * Destroys the projectile entity by removing it from the game area.
+	 */
+	private void destroyProjectile() {
+		if (destroyed) {
+			return;
+		}
 
-    /**
-     * Handles the impact event, cancelling the bullet expiration event and disabling touch attack functionality.
-     */
-    private void impact() {
-        if (destroyOnImpact) {
-            entity.getEvents().cancelEvent(bulletExpiredEvent);
-            physicsComponent.getBody().setLinearVelocity(0,  0);
-            entity.getComponent(TouchAttackComponent.class).setEnabled(false);
-        }
+		destroyed = true;
+		ServiceLocator.getGameArea().removeEntity(entity);
+	}
 
-        hasImpact = true;
-    }
+	/**
+	 * Handles the impact event, cancelling the bullet expiration event and disabling touch attack functionality.
+	 */
+	private void impact() {
+		if (destroyOnImpact) {
+			entity.getEvents().cancelEvent(bulletExpiredEvent);
+			physicsComponent.getBody().setLinearVelocity(0, 0);
+			entity.getComponent(TouchAttackComponent.class).setEnabled(false);
+		}
 
-    /**
-     * Updates the projectile's behavior, destroying it once its impact animation is finished.
-     */
-    @Override
-    public void update() {
-        if (hasImpact && destroyOnImpact && entity.getComponent(AnimationRenderComponent.class).isFinished()) {
-                destroyProjectile();
-        }
-    }
+		hasImpact = true;
+	}
 
-    public void setDestroyOnImpact(boolean destroyOnImpact) {
-        this.destroyOnImpact = destroyOnImpact;
-    }
+	/**
+	 * Updates the projectile's behavior, destroying it once its impact animation is finished.
+	 */
+	@Override
+	public void update() {
+		if (hasImpact && destroyOnImpact && entity.getComponent(AnimationRenderComponent.class).isFinished()) {
+			destroyProjectile();
+		}
+	}
 
-    /**
-     * Gets the velocity vector of the projectile.
-     *
-     * @return The velocity vector of the projectile.
-     */
-    public Vector2 getVelocity() {
-        return velocity.cpy();
-    }
+	public void setDestroyOnImpact(boolean destroyOnImpact) {
+		this.destroyOnImpact = destroyOnImpact;
+	}
+
+	/**
+	 * Gets the velocity vector of the projectile.
+	 *
+	 * @return The velocity vector of the projectile.
+	 */
+	public Vector2 getVelocity() {
+		return velocity.cpy();
+	}
 
 
-    /**
-     * Set velocity without triggering movement, used for setting knockback velocity
-     * @param velocity velocity to set
-     */
-    public void setVelocity(Vector2 velocity) {
-        this.velocity = velocity;
-    }
+	/**
+	 * Set velocity without triggering movement, used for setting knockback velocity
+	 *
+	 * @param velocity velocity to set
+	 */
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
 }

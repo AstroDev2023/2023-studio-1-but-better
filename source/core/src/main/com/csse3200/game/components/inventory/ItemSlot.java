@@ -173,8 +173,7 @@ public class ItemSlot extends Stack {
 		if (stack != null) {
 			if (stack.getChildren().size == 2) {
 				label = (Label) (stack.getChild(1));
-			}
-			else {
+			} else {
 				label = null;
 			}
 			this.draggable = stack;
@@ -184,7 +183,7 @@ public class ItemSlot extends Stack {
 
 	public void setItemImage(Image image) {
 		if (draggable.hasChildren()) {
-		draggable.removeActorAt(0,true);
+			draggable.removeActorAt(0, true);
 		}
 		if (image != null) {
 			draggable.addActorAt(0, image);

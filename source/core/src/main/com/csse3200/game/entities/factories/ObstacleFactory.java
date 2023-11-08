@@ -14,40 +14,42 @@ import com.csse3200.game.rendering.TextureRenderComponent;
  * <p>Each obstacle entity type should have a creation method that returns a corresponding entity.
  */
 public class ObstacleFactory {
-  
-  /**
-   * Creates an invisible obstacle entity which located onto the non-traversable area of the map.
-   * @return Invisible obstacle entity
-   */
-  public static Entity createInvisibleObstacle() {
-    Entity obstacle =
-            new Entity()
-                    .addComponent(new TextureRenderComponent("images/invisible_sprite.png"))
-                    .addComponent(new PhysicsComponent())
-                    .addComponent(new ColliderComponent().setLayer(PhysicsLayer.OBSTACLE));
 
-    obstacle.getComponent(PhysicsComponent.class).setBodyType(BodyType.StaticBody);
-    obstacle.getComponent(TextureRenderComponent.class).scaleEntity();
-    obstacle.scaleHeight(1f);
-    PhysicsUtils.setScaledCollider(obstacle, 1f, 1f);
-    return obstacle;
-  }
+	/**
+	 * Creates an invisible obstacle entity which located onto the non-traversable area of the map.
+	 *
+	 * @return Invisible obstacle entity
+	 */
+	public static Entity createInvisibleObstacle() {
+		Entity obstacle =
+				new Entity()
+						.addComponent(new TextureRenderComponent("images/invisible_sprite.png"))
+						.addComponent(new PhysicsComponent())
+						.addComponent(new ColliderComponent().setLayer(PhysicsLayer.OBSTACLE));
 
-  /**
-   * Creates an invisible physics wall.
-   * @param width Wall width in world units
-   * @param height Wall height in world units
-   * @return Wall entity of given width and height
-   */
-  public static Entity createWall(float width, float height) {
-    Entity wall = new Entity()
-        .addComponent(new PhysicsComponent().setBodyType(BodyType.StaticBody))
-        .addComponent(new ColliderComponent().setLayer(PhysicsLayer.OBSTACLE));
-    wall.setScale(width, height);
-    return wall;
-  }
+		obstacle.getComponent(PhysicsComponent.class).setBodyType(BodyType.StaticBody);
+		obstacle.getComponent(TextureRenderComponent.class).scaleEntity();
+		obstacle.scaleHeight(1f);
+		PhysicsUtils.setScaledCollider(obstacle, 1f, 1f);
+		return obstacle;
+	}
 
-  private ObstacleFactory() {
-    throw new IllegalStateException("Instantiating static util class");
-  }
+	/**
+	 * Creates an invisible physics wall.
+	 *
+	 * @param width  Wall width in world units
+	 * @param height Wall height in world units
+	 * @return Wall entity of given width and height
+	 */
+	public static Entity createWall(float width, float height) {
+		Entity wall = new Entity()
+				.addComponent(new PhysicsComponent().setBodyType(BodyType.StaticBody))
+				.addComponent(new ColliderComponent().setLayer(PhysicsLayer.OBSTACLE));
+		wall.setScale(width, height);
+		return wall;
+	}
+
+	private ObstacleFactory() {
+		throw new IllegalStateException("Instantiating static util class");
+	}
 }
