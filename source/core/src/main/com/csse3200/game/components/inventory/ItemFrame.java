@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.csse3200.game.services.ServiceLocator;
 
 public class ItemFrame extends Actor {
     private final ShapeRenderer shapeRenderer;
@@ -19,13 +17,14 @@ public class ItemFrame extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.end();
-        Gdx.gl.glLineWidth(2f);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         if (selected) {
-            shapeRenderer.setColor(Color.BLUE);
+            Gdx.gl.glLineWidth(4f);
+            shapeRenderer.setColor(new Color(0x76428aff));
         }
         else {
+            Gdx.gl.glLineWidth(2f);
             shapeRenderer.setColor(Color.BLACK);
         }
 
